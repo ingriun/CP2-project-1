@@ -4,7 +4,8 @@ import numpy as np
 h_bar = 1.05 * 10**(-31)
 m = float
 dim = int
-Psi = np.zeros(dim, dim)
+N = int
+Psi = np.zeros(dim, N)
 V = 'formula'
 a = 'lattice spacing'
 ###########
@@ -12,15 +13,15 @@ a = 'lattice spacing'
 
 def hamiltonian(Psi, dim, V, x):
     # Initialise the hamiltonian as 2dim-array  
-    H = [][]
+    H = np.zeros(dim, dim)
 
     # calculate the lattice discretized 2nd derivative of Psi
-    Psi2nd_array = []
+    Psi2nd_array = np.zeros(dim)
 
-    for n in (0..dim):
-        Psi2nd_array[n] = (Psi[n][x+a] - 2**Psi[n] + Psi[n][x-a])/a
+    for n in (0,dim):
+        Psi2nd_array[n] = (Psi[n][x[n]+a] - 2**Psi[n] + Psi[n][x[n]-a])/a
 
     Psi2nd_float = np.sum(Psi2nd_array)
-    H = -(h_bar**2)/(2*m)*Psi2nd + V*Psi
+    H = -(h_bar**2)/(2*m)*Psi2nd_float + V*Psi
 
-    return Hpsi
+    return H
