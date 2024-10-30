@@ -3,15 +3,17 @@ import numpy as np
 #######initializing variables######
 h_bar = 1.05 * 10**(-31)
 m = float
-dim = int
-N = int
-Psi = np.zeros(dim, N)
+dim = 1
+N = 6
+Psi = np.zeros(N, N) #N^d 
 V = 'formula'
 a = 'lattice spacing'
 ###########
 
 
 def hamiltonian(Psi, dim, V, x):
+
+    dim = np.shape(Psi)
     # Initialise the hamiltonian as 2dim-array  
     H = np.zeros(dim, dim)
 
@@ -25,3 +27,9 @@ def hamiltonian(Psi, dim, V, x):
     H = -(h_bar**2)/(2*m)*Psi2nd_float + V*Psi
 
     return H
+
+x = np.linspace(0, 5, N)
+Psi[dim] = np.ones(N)
+Pot = m
+
+print(hamiltonian(Psi, dim, ))
