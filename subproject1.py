@@ -13,7 +13,7 @@ a = 'lattice spacing'
 
 def hamiltonian(Psi, dim, V, x):
 
-    dim = np.shape(Psi)
+    dim = np.ndim(Psi)
     # Initialise the hamiltonian as 2dim-array  
     H = np.zeros(dim, dim)
 
