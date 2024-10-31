@@ -1,13 +1,11 @@
 import numpy as np
 
 #######initializing variables######
-h_bar = 1.05 * 10**(-31)
-m = float
+epsilon = 1
+mu = 1
 dim = 1
 N = 6
 Psi = np.zeros(N, N) #N^d 
-V = 'formula'
-a = 'lattice spacing'
 ###########
 
 
