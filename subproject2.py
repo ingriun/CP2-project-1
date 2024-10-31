@@ -2,7 +2,7 @@
 import numpy as np
 import numpy.random as random
 
-def linearity_test(H, psi1, psi2):
+def linearityTest(H, psi1, psi2):
     """
     testing linearity of the hamiltonian operator
 
@@ -11,6 +11,7 @@ def linearity_test(H, psi1, psi2):
     - psi1, psi2: sample wavefunctions
 
     output parameters:
+    - True if linear, False if not
 
     """
     a = random.randint(0, 50)
@@ -50,16 +51,28 @@ return np.allclose(left_side, right_side)
 
 """
 
-def hermitian_test():
+def hermiticityTest(H, psi1, psi2):
     """
     testing if the hamiltonian operator is hermitian.
 
     input parameters:
+    - H: Hamiltonian operator, function
+    - psi1, psi2: sample wavefunctions
 
     output parameters:
+    - True if hermitian, false if not
 
     """
-    return
+
+    H_psi1 = H(psi1)
+
+    H_psi2 = H(psi2)
+
+    leftSide = np.sum((np.conj(psi1) * H_psi1))
+
+    rightSide = np.sum((np.conj(H_psi1) * psi2))
+
+    return np.allclose(leftSide, rightSide)
 """
 
 def test_hermitian(H, psi1, psi2):
@@ -81,3 +94,5 @@ right_side = np.vdot(H @ psi1, psi2)  # <H psi1 | psi2>
 return np.allclose(left_side, right_side)
 
 """
+
+def positivityTest():
