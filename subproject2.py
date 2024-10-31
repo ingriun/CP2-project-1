@@ -1,15 +1,28 @@
 ##testing linearity
+import numpy as np
+import numpy.random as random
 
-def linearity_test():
+def linearity_test(H, psi1, psi2):
     """
     testing linearity of the hamiltonian operator
 
     input parameters:
+    - H: Hamiltonian operator, function
+    - psi1, psi2: sample wavefunctions
 
     output parameters:
 
     """
-    return
+    a = random.randint(0, 50)
+    b = random.randint(0, 50)
+
+    psiLeft = a * psi1 + b * psi2
+
+    leftSide = H(psiLeft)
+
+    rightSide = H(a*psi1) + H(b*psi2)
+
+    return np.allclose(leftSide, rightSide)
 
 
 
@@ -44,7 +57,7 @@ def hermitian_test():
     input parameters:
 
     output parameters:
-    
+
     """
     return
 """
