@@ -1,33 +1,49 @@
 import numpy as np
 
+
 #######initializing variables######
 epsilon = 1
 mu = 1
 dim = 1
-N = 6
-Psi = np.zeros(N, N) #N^d 
+N = 6 
 ###########
 
 
-def hamiltonian(Psi, dim, V, x):
+# n-dimensional array
+def ndimTensor(dim, N):
+    
+
+    list = [N for x in range(0,dim)]
+    
+    # tuple containing the shape of the array
+    tuplet = tuple(list)
+        
+    array = np.ndarray(tuplet)
+    return array
+
+# Initialize Psi
+Psi = ndimTensor(dim, N)
+
+
+
+def hamiltonian(Psi, V, x):
 
     dim = np.ndim(Psi)
     # Initialise the hamiltonian as 2dim-array  
-    H = np.zeros(dim, dim)
-
+    H_hat = np.shape(Psi)
+    
     # calculate the lattice discretized 2nd derivative of Psi
     Psi2nd_array = np.zeros(dim)
-
-    for n in (0,dim):
-        Psi2nd_array[n] = (Psi[n][x[n]+a] - 2**Psi[n] + Psi[n][x[n]-a])/a
-
+    
+    
     Psi2nd_float = np.sum(Psi2nd_array)
-    H = -(h_bar**2)/(2*m)*Psi2nd_float + V*Psi
-
-    return H
+    
+    H_hat = -1/(2*mu*epsilon**2)*Psi2nd_float + V*Psi
+    
+    return H_hat
 
 x = np.linspace(0, 5, N)
 Psi[dim] = np.ones(N)
 Pot = m
 
-print(hamiltonian(Psi, dim, ))
+print(hamiltonian(Psi, dim))
