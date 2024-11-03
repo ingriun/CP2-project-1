@@ -45,7 +45,7 @@ def hamiltonian(Psi, V, x):
 
 x = np.linspace(0, 5, N)
 Psi[dim] = np.ones(N)
-#Pot = m
+Pot = m
 
 print(hamiltonian(Psi, dim))
 
@@ -65,4 +65,12 @@ def strang_splitting_integrator(Psi, H_hat):
     eta = V_half * Psi
 
     #fourier transform to momentum space
-     eta_tilde = np.fft.fftn(eta)
+    eta_tilde = np.fft.fftn(eta)
+
+    K_hat = hamiltonian(eta, np.zeros_like(V)) #calculate kinetic hamiltonian by setting V=0
+    K_exp = np.exp(-1j * (tau_hat) * K_hat) #kinetic evolution oeprator
+
+    #apply kinetic part
+    xi = np.fft.ifft2(K_exp * eta_tilde) #transform back to position space
+
+    return V_half * xi
