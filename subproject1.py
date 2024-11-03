@@ -45,7 +45,7 @@ def hamiltonian(Psi, V, x):
 
 x = np.linspace(0, 5, N)
 Psi[dim] = np.ones(N)
-Pot = m
+#Pot = m
 
 print(hamiltonian(Psi, dim))
 
@@ -65,4 +65,4 @@ def strang_splitting_integrator(Psi, H_hat):
     eta = V_half * Psi
 
     #fourier transform to momentum space
-     eta_tilde = np.fft.fftn(eta)
+    eta_tilde = np.fft.fftn(eta)
