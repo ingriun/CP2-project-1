@@ -6,6 +6,7 @@ epsilon = 1
 mu = 1
 dim = 1
 N = 6 
+tau_hat = 0.1
 ###########
 
 
