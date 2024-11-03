@@ -96,3 +96,13 @@ return np.allclose(left_side, right_side)
 """
 
 def positivityTest():
+    """
+    testing if the hamiltonian is positive when the potential is positive
+
+    input parameters:
+
+    output parameters:
+
+    """
+
+    return
