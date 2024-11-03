@@ -57,20 +57,29 @@ def euler_integrator(Psi, H_hat):
 def second_order_integrator(Psi, H_hat):
     return Psi - 1j * tau_hat * H_hat @ Psi - (tau_hat**2 / 2) * (H_hat @ H_hat @ Psi)
 
+# strang splitting integrator
 def strang_splitting_integrator(Psi, H_hat):
     # Split Hamiltonian into kinetic and potential parts
     V_half = np.exp(-1j * (tau_hat / 2) * V)  # e^(-i*tau_hat/2 * V)
     
-    # Apply potential
-    eta = V_half * Psi
+    eta = V_half * Psi #apply V_half to psi in position space
 
-    #fourier transform to momentum space
+    #fourier transform to momentum space for kinetic term
     eta_tilde = np.fft.fftn(eta)
+    # Define the Fourier space wave numbers
+    k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
+    k_mesh = np.meshgrid(*([k] * dim), indexing='ij')  # Create a meshgrid for each dimension
 
-    K_hat = hamiltonian(eta, np.zeros_like(V)) #calculate kinetic hamiltonian by setting V=0
-    K_exp = np.exp(-1j * (tau_hat) * K_hat) #kinetic evolution oeprator
+    # Calculate eigenvalues of K_hat in Fourier space using the known formula
+    K_eigenvalues = sum((2 / (mu * epsilon**2)) * np.sin(k_dim / 2)**2 for k_dim in k_mesh)
+
+    # Define the kinetic evolution operator in Fourier space
+    def kinetic_evolution_operator(tau_hat):
+        return np.exp(-1j * tau_hat * K_eigenvalues)
+
+    K_exp = kinetic_evolution_operator(tau_hat)
 
     #apply kinetic part
-    xi = np.fft.ifft2(K_exp * eta_tilde) #transform back to position space
+    xi = np.fft.ifftn(K_exp * eta_tilde) #transform back to position space
 
     return V_half * xi
