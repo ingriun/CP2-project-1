@@ -65,4 +65,4 @@ def strang_splitting_integrator(Psi, H_hat):
     eta = V_half * Psi
 
     #fourier transform to momentum space
-    eta_tilde = np.fft.fftn(eta)
+     eta_tilde = np.fft.fftn(eta)
