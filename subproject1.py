@@ -67,8 +67,8 @@ def strang_splitting_integrator(Psi, H_hat):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-    K_hat = hamiltonian(eta, np.zeros_like(V))
-    K_exp = np.exp(-1j * (tau_hat) * K_hat)
+    K_hat = hamiltonian(eta, np.zeros_like(V)) #calculate kinetic hamiltonian by setting V=0
+    K_exp = np.exp(-1j * (tau_hat) * K_hat) #kinetic evolution oeprator
 
     #apply kinetic part
     xi = np.fft.ifft2(K_exp * eta_tilde) #transform back to position space
