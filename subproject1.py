@@ -27,7 +27,7 @@ def ndim_Ones(dim, N):
 psi = ndim_Ones(dim, N)
 
 
-def Derivative(psi):
+def derivative(psi):
     # Initialize psi_2nd to have the same shape as psi
     psi_2nd = np.zeros(psi.shape)  
 
@@ -35,32 +35,43 @@ def Derivative(psi):
     
     return psi_2nd
 
-y = Derivative(psi)
+y = derivative(psi)
 print("2nd-derivative :")
 print(y)
 
 
-def Potential(psi):
-    # Initialize v_psi to have the same shape as psi
-    v_psi = np.zeros(psi.shape)  
+def potential(psi):
+    # Initialize V_psi to have the same shape as psi
+    v_psi = np.zeros(psi.shape) 
+
+    # Number of point along an axis
+    N = list(psi.shape)[0]
+
+    # Create an array of N-indices in 1 dimension
+    indices = np.arange(N)
+
+    # Calculate the potential
+    v_psi = psi * mu/8*(epsilon**2 * indices**2 - 1)
 
     return v_psi
+
+v = potential(psi)
+print("Potential : ")
+print(v)
 
 
 def hamiltonian(psi):
 
     psi_2nd = Derivative(psi)    
 
-    
-    h_hat = -1/(2*mu*epsilon**2)*psi_2nd
+    v_psi = Potential(psi)
+    # Calculate the hamiltonian
+    h_hat = -1/(2*mu*epsilon**2)*psi_2nd + v_psi
     
     return h_hat
 
-x = np.linspace(0, 5, N)
-psi[dim] = np.ones(N)
-Pot = m
 
-print(hamiltonian(psi, dim))
+print(hamiltonian(psi))
 
 # Euler Integrator
 def euler_integrator(psi, h_hat):
