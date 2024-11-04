@@ -62,9 +62,9 @@ print(v)
 
 def hamiltonian(psi):
 
-    psi_2nd = Derivative(psi)    
+    psi_2nd = derivative(psi)    
 
-    v_psi = Potential(psi)
+    v_psi = potential(psi)
     # Calculate the hamiltonian
     h_hat = -1/(2*mu*epsilon**2)*psi_2nd + v_psi
     
