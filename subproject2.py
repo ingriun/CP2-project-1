@@ -1,13 +1,14 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
+from subproject1 import hamiltonian as hami 
 
-def linearityTest(H, V, x, psi1, psi2):
+def linearityTest(psi1, psi2):
     """
     testing linearity of the hamiltonian operator
 
     input parameters:
-    - H: Hamiltonian operator, function
+    - h: Hamiltonian operator, function
     - psi1, psi2: sample wavefunctions
 
     output parameters:
@@ -19,9 +20,9 @@ def linearityTest(H, V, x, psi1, psi2):
 
     psiLeft = a * psi1 + b * psi2
 
-    leftSide = H(psiLeft, V, x)
+    leftSide = hami(psiLeft)
 
-    rightSide = H(a*psi1, V, x) + H(b*psi2, V, x)
+    rightSide = hami(a*psi1) + hami(b*psi2)
 
     return np.allclose(leftSide, rightSide)
 
@@ -51,7 +52,7 @@ return np.allclose(left_side, right_side)
 
 """
 
-def hermiticityTest(H, V, x, psi1, psi2):
+def hermiticityTest(psi1, psi2):
     """
     testing if the hamiltonian operator is hermitian.
 
@@ -64,9 +65,9 @@ def hermiticityTest(H, V, x, psi1, psi2):
 
     """
 
-    H_psi1 = H(psi1, V, x)
+    H_psi1 = hami(psi1)
 
-    H_psi2 = H(psi2, V, x)
+    H_psi2 = hami(psi2)
 
     leftSide = np.vdot((psi1, H_psi1))
 
@@ -95,7 +96,7 @@ return np.allclose(left_side, right_side)
 
 """
 
-def positivityTest(H, V, x, psi):
+def positivityTest(psi):
     """
     testing if the hamiltonian is positive when the potential is positive
 
@@ -104,7 +105,7 @@ def positivityTest(H, V, x, psi):
     output parameters:
 
     """
-    H_psi = H(psi, V, x)
+    H_psi = hami(psi)
 
     expValue =  np.vdot((psi, H_psi))
 
@@ -112,15 +113,13 @@ def positivityTest(H, V, x, psi):
 
 
 
-def eigenvalueTest(H, V, x, psi):
+def eigenvalueTest(psi):
     """
     input parameters:
 
     output parameters:
 
     """
-    leftSide = H(psi, V, x)
-
-    
+    leftSide = hami(psi)
 
     return
