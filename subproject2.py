@@ -1,14 +1,14 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian as hami 
+from subproject1 import hamiltonian
 
 def linearityTest(psi1, psi2):
     """
     testing linearity of the hamiltonian operator
 
     input parameters:
-    - h: Hamiltonian operator, function
+    - h: hamiltonian operator, function
     - psi1, psi2: sample wavefunctions
 
     output parameters:
@@ -20,9 +20,9 @@ def linearityTest(psi1, psi2):
 
     psiLeft = a * psi1 + b * psi2
 
-    leftSide = hami(psiLeft)
+    leftSide = hamiltonian(psiLeft)
 
-    rightSide = hami(a*psi1) + hami(b*psi2)
+    rightSide = hamiltonian(a*psi1) + hamiltonian(b*psi2)
 
     return np.allclose(leftSide, rightSide)
 
@@ -31,10 +31,10 @@ def linearityTest(psi1, psi2):
 """
 def test_linearity(H, psi1, psi2, a, b):
 
-Test the linearity of the Hamiltonian operator.
+Test the linearity of the hamiltonian operator.
 
 Parameters:
-- H: Hamiltonian operator.
+- H: hamiltonian operator.
 - psi1, psi2: Two sample wavefunctions.
 - a, b: Scalars for the linearity test.
 
@@ -57,7 +57,7 @@ def hermiticityTest(psi1, psi2):
     testing if the hamiltonian operator is hermitian.
 
     input parameters:
-    - H: Hamiltonian operator, function
+    - H: hamiltonian operator, function
     - psi1, psi2: sample wavefunctions
 
     output parameters:
@@ -65,23 +65,23 @@ def hermiticityTest(psi1, psi2):
 
     """
 
-    H_psi1 = hami(psi1)
+    h_psi1 = hamiltonian(psi1)
 
-    H_psi2 = hami(psi2)
+    h_psi2 = hamiltonian(psi2)
 
-    leftSide = np.vdot((psi1, H_psi1))
+    leftSide = np.vdot((psi1, h_psi2))
 
-    rightSide = np.sum((H_psi1, psi2))
+    rightSide = np.sum((h_psi1, psi2))
 
     return np.allclose(leftSide, rightSide)
 """
 
 def test_hermitian(H, psi1, psi2):
 
-Test the Hermitian property of the Hamiltonian operator.
+Test the Hermitian property of the hamiltonian operator.
 
 Parameters:
-- H: Hamiltonian operator.
+- H: hamiltonian operator.
 - psi1, psi2: Two sample wavefunctions.
 
 Returns:
@@ -105,9 +105,9 @@ def positivityTest(psi):
     output parameters:
 
     """
-    H_psi = hami(psi)
+    h_psi = hamiltonian(psi)
 
-    expValue =  np.vdot((psi, H_psi))
+    expValue =  np.vdot((psi, h_psi))
 
     return expValue >= 0
 
@@ -120,6 +120,6 @@ def eigenvalueTest(psi):
     output parameters:
 
     """
-    leftSide = hami(psi)
+    leftSide = hamiltonian(psi)
 
     return

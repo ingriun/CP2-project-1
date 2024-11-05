@@ -42,7 +42,7 @@ print(y)
 
 def potential(psi):
     # Initialize V_psi to have the same shape as psi
-    v_psi = np.zeros(psi.shape) 
+    v = np.zeros(psi.shape) 
 
     # Number of point along an axis
     N = list(psi.shape)[0]
@@ -51,9 +51,9 @@ def potential(psi):
     indices = np.arange(N)
 
     # Calculate the potential
-    v_psi = psi * mu/8*(epsilon**2 * indices**2 - 1)
+    v = mu/8*((epsilon**2 * indices**2 - 1)**2)
 
-    return v_psi
+    return v
 
 v = potential(psi)
 print("Potential : ")
@@ -64,9 +64,9 @@ def hamiltonian(psi):
 
     psi_2nd = derivative(psi)    
 
-    v_psi = potential(psi)
+    v = potential(psi)
     # Calculate the hamiltonian
-    h_hat = -1/(2*mu*epsilon**2)*psi_2nd + v_psi
+    h_hat = -1/(2*mu*epsilon**2)*psi_2nd + v * psi
     
     return h_hat
 
@@ -74,16 +74,16 @@ def hamiltonian(psi):
 print(hamiltonian(psi))
 
 # Euler Integrator
-def euler_integrator(psi, h_hat):
-    return psi - 1j * tau_hat * h_hat @ psi
+def euler_integrator(psi): # add tau_hat in parameters?
+    return psi - 1j * tau_hat * hamiltonian(psi)
 
 # Second-order Integrator
-def second_order_integrator(psi, h_hat):
-    return psi - 1j * tau_hat * h_hat @ psi - (tau_hat**2 / 2) * (h_hat @ h_hat @ psi)
+def second_order_integrator(psi):   # add tau_hat in parameters?
+    return psi - 1j * tau_hat * hamiltonian(psi) - (tau_hat**2 / 2) * (hamiltonian(hamiltonian(psi)))
 
-def strang_splitting_integrator(psi, h_hat):
+def strang_splitting_integrator(psi):
     # Split Hamiltonian into kinetic and potential parts
-    v_half = np.exp(-1j * (tau_hat / 2) * V)  # e^(-i*tau_hat/2 * V)
+    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
     
     # Apply potential
     eta = v_half * psi
@@ -91,7 +91,8 @@ def strang_splitting_integrator(psi, h_hat):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-    k_hat = hamiltonian(eta, np.zeros_like(V)) #calculate kinetic hamiltonian by setting V=0
+    v_eta = potential(eta) #calculate potential
+    k_hat = hamiltonian(eta) - v_eta #calculate kinetic hamiltonian by removing the V part (setting V=0)
     k_exp = np.exp(-1j * (tau_hat) * k_hat) #kinetic evolution oeprator
 
     #apply kinetic part
