@@ -1,7 +1,17 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian
+from subproject1 import hamiltonian, potential
+from math import pi
+
+#######initializing variables######
+epsilon = 1
+mu = 1
+dim = 1
+N = 6 
+tau_hat = 0.1
+###########
+
 
 def linearityTest(psi1, psi2):
     """
@@ -75,6 +85,13 @@ def eigenvalueTest(psi):
     output parameters:
 
     """
+
+    v = potential(psi)
+
+    eigenvalue = 1/(2*mu*epsilon**2) * (4*(pi**2)*(k**2))/(N**2) + v
+
+    rightSide = eigenvalue * psi
+
     leftSide = hamiltonian(psi)
 
-    return
+    return np.allclose(leftSide, rightSide)
