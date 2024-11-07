@@ -15,8 +15,8 @@ def linearityTest(psi1, psi2):
     - True if linear, False if not
 
     """
-    a = random.uniform(0, 50) + 1j * random.uniform(0, 50)
-    b = random.uniform(0, 50) + 1j * random.uniform(0, 50)
+    a = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
+    b = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
 
     psiLeft = a * psi1 + b * psi2
 
