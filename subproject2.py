@@ -80,9 +80,10 @@ def positivityTest(psi):
 
 def eigenvalueTest(dim, N):
     """
-    input parameters:
+    input parameters: dim, N
 
-    output parameters:
+    output parameters: True if H(psi_k) = E_k*psi_k for one given eigenvector
+                       False if not                          
 
     """
 
@@ -90,13 +91,15 @@ def eigenvalueTest(dim, N):
 
     k = np.array(random.randint(-15, 15) for x in range(0,dim))
 
-    psi = np.exp(2* np.pi * 1j * np.vdot(n, k)/N)
-
-    v = potential(psi)
-
+    # Choose 1 value of k 
     k_prime = k[random.randint(0,dim)]
 
-    eigenvalue = 1/(2*mu*epsilon**2) * (4*(pi**2)*(k**2))/(N**2) + v
+    # wave function with the chosen value of k 
+    psi = np.exp(2* np.pi * 1j * np.vdot(n, k_prime)/N)
+
+
+    # Eigenvalue with the ghosen value of k
+    eigenvalue = 1/(2*mu*epsilon**2) * (4*(pi**2)*(k_prime**2))/(N**2) # potential = 0
 
     rightSide = eigenvalue * psi
 
@@ -108,6 +111,4 @@ def eigenvalueTest(dim, N):
 def testProperties():
 
     for i in range(0, 50):
-
-
-        
+        eigenvalueTest(dim, N)
