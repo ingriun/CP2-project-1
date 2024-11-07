@@ -78,13 +78,19 @@ def positivityTest(psi):
 
 
 
-def eigenvalueTest(psi):
+def eigenvalueTest(dim):
     """
     input parameters:
 
     output parameters:
 
     """
+
+    n = np.arange(N)
+
+    k = np.array(random.randint(-15, 15) for x in range(0,dim))
+
+    psi = np.exp(2* np.pi * 1j * np.vdot(n, k)/N)
 
     v = potential(psi)
 
@@ -95,3 +101,8 @@ def eigenvalueTest(psi):
     leftSide = hamiltonian(psi)
 
     return np.allclose(leftSide, rightSide)
+
+def testProperties():
+
+    for i in range(0, 50):
+        
