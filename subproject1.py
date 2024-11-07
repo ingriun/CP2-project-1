@@ -86,7 +86,7 @@ def strang_splitting_integrator(Psi, H_hat):
     # Split Hamiltonian into kinetic and potential parts
     v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
     
-    eta = V_half * Psi #apply V_half to psi in position space
+    eta = v_half * Psi #apply V_half to psi in position space
 
     #fourier transform to momentum space for kinetic term
     eta_tilde = np.fft.fftn(eta)
