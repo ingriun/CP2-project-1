@@ -1,13 +1,14 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
+from subproject1 import hamiltonian
 
-def linearityTest(H, V, x, psi1, psi2):
+def linearityTest(psi1, psi2):
     """
     testing linearity of the hamiltonian operator
 
     input parameters:
-    - H: Hamiltonian operator, function
+    - h: hamiltonian operator, function
     - psi1, psi2: sample wavefunctions
 
     output parameters:
@@ -19,9 +20,9 @@ def linearityTest(H, V, x, psi1, psi2):
 
     psiLeft = a * psi1 + b * psi2
 
-    leftSide = H(psiLeft, V, x)
+    leftSide = hamiltonian(psiLeft)
 
-    rightSide = H(a*psi1, V, x) + H(b*psi2, V, x)
+    rightSide = hamiltonian(a*psi1) + hamiltonian(b*psi2)
 
     return np.allclose(leftSide, rightSide)
 
@@ -30,10 +31,10 @@ def linearityTest(H, V, x, psi1, psi2):
 """
 def test_linearity(H, psi1, psi2, a, b):
 
-Test the linearity of the Hamiltonian operator.
+Test the linearity of the hamiltonian operator.
 
 Parameters:
-- H: Hamiltonian operator.
+- H: hamiltonian operator.
 - psi1, psi2: Two sample wavefunctions.
 - a, b: Scalars for the linearity test.
 
@@ -51,12 +52,12 @@ return np.allclose(left_side, right_side)
 
 """
 
-def hermiticityTest(H, V, x, psi1, psi2):
+def hermiticityTest(psi1, psi2):
     """
     testing if the hamiltonian operator is hermitian.
 
     input parameters:
-    - H: Hamiltonian operator, function
+    - H: hamiltonian operator, function
     - psi1, psi2: sample wavefunctions
 
     output parameters:
@@ -64,23 +65,23 @@ def hermiticityTest(H, V, x, psi1, psi2):
 
     """
 
-    H_psi1 = H(psi1, V, x)
+    h_psi1 = hamiltonian(psi1)
 
-    H_psi2 = H(psi2, V, x)
+    h_psi2 = hamiltonian(psi2)
 
-    leftSide = np.vdot((psi1, H_psi1))
+    leftSide = np.vdot((psi1, h_psi2))
 
-    rightSide = np.sum((H_psi1, psi2))
+    rightSide = np.sum((h_psi1, psi2))
 
     return np.allclose(leftSide, rightSide)
 """
 
 def test_hermitian(H, psi1, psi2):
 
-Test the Hermitian property of the Hamiltonian operator.
+Test the Hermitian property of the hamiltonian operator.
 
 Parameters:
-- H: Hamiltonian operator.
+- H: hamiltonian operator.
 - psi1, psi2: Two sample wavefunctions.
 
 Returns:
@@ -95,7 +96,7 @@ return np.allclose(left_side, right_side)
 
 """
 
-def positivityTest(H, V, x, psi):
+def positivityTest(psi):
     """
     testing if the hamiltonian is positive when the potential is positive
 
@@ -104,23 +105,21 @@ def positivityTest(H, V, x, psi):
     output parameters:
 
     """
-    H_psi = H(psi, V, x)
+    h_psi = hamiltonian(psi)
 
-    expValue =  np.vdot((psi, H_psi))
+    expValue =  np.vdot((psi, h_psi))
 
     return expValue >= 0
 
 
 
-def eigenvalueTest(H, V, x, psi):
+def eigenvalueTest(psi):
     """
     input parameters:
 
     output parameters:
 
     """
-    leftSide = H(psi, V, x)
-
-    
+    leftSide = hamiltonian(psi)
 
     return
