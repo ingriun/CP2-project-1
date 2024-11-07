@@ -78,7 +78,7 @@ def positivityTest(psi):
 
 
 
-def eigenvalueTest(dim):
+def eigenvalueTest(dim, N):
     """
     input parameters:
 
@@ -94,6 +94,8 @@ def eigenvalueTest(dim):
 
     v = potential(psi)
 
+    k_prime = k[random.randint(0,dim)]
+
     eigenvalue = 1/(2*mu*epsilon**2) * (4*(pi**2)*(k**2))/(N**2) + v
 
     rightSide = eigenvalue * psi
@@ -102,7 +104,10 @@ def eigenvalueTest(dim):
 
     return np.allclose(leftSide, rightSide)
 
+
 def testProperties():
 
     for i in range(0, 50):
+
+
         
