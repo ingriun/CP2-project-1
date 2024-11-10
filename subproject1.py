@@ -1,11 +1,12 @@
 import numpy as np
-
+import numpy.random as random
+from math import pi
 
 #######initializing variables######
 epsilon = 1
 mu = 1
-dim = 1
-N = 6 
+dim = 2
+N = 3
 tau_hat = 0.1
 ###########
 
@@ -28,11 +29,9 @@ psi = ndim_Ones(dim, N)
 
 
 def derivative(psi):
-    # Initialize psi_2nd to have the same shape as psi
-    psi_2nd = np.zeros(psi.shape)  
-
+    # Initialize psi_2nd to have the same shape as psi 
     psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) # Calculate psi_2nd
-    
+
     return psi_2nd
 
 y = derivative(psi)
@@ -40,9 +39,15 @@ print("2nd-derivative :")
 print(y)
 
 def kineticEnergy(psi):
-    k_hat = np.ones(psi.shape)
-    k_hat = -1/(2*mu*epsilon**2)*k_hat
+    array = np.ones(psi.shape)
+    k_hat = -1/(2*mu*epsilon**2)*array
 
+    return k_hat
+
+
+k = kineticEnergy(psi)
+print("Kinetic Energy :")
+print(k)
 
 def potential(psi):
     # Initialize V_psi to have the same shape as psi
@@ -57,11 +62,9 @@ def potential(psi):
     # Calculate the potential
     v_hat = mu/8*((epsilon**2 * indices**2 - 1)**2)
 
-    return v
+    return v_hat
 
-v = potential(psi)
-print("Potential : ")
-print(v)
+
 
 
 def hamiltonian(psi):
@@ -76,8 +79,7 @@ def hamiltonian(psi):
     
     return h_hat
 
-
-print(hamiltonian(psi))
+h = hamiltonian(psi)
 
 # Euler Integrator
 def euler_integrator(psi): # add tau_hat in parameters?

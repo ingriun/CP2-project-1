@@ -1,19 +1,30 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian, potential
+from subproject1 import hamiltonian, derivative, kineticEnergy
 from math import pi
 
 #######initializing variables######
 epsilon = 1
 mu = 1
-dim = 1
-N = 6 
+dim = 2
+N = 3
 tau_hat = 0.1
 ###########
 
+def ndim_Random(dim, N):
 
-def linearityTest(psi1, psi2):
+
+    list = [N for x in range(0,dim)]
+    
+    # tuple containing the shape of the lattice
+    tuplet = tuple(list)
+        
+    array = np.random.rand(*tuplet)
+    return array
+
+
+def linearityTest(dim, N):
     """
     testing linearity of the hamiltonian operator
 
@@ -28,6 +39,9 @@ def linearityTest(psi1, psi2):
     a = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
     b = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
 
+    psi1 = ndim_Random(dim, N)
+    psi2 = ndim_Random(dim, N)
+
     psiLeft = a * psi1 + b * psi2
 
     leftSide = hamiltonian(psiLeft)
@@ -37,7 +51,7 @@ def linearityTest(psi1, psi2):
     return np.allclose(leftSide, rightSide)
 
 
-def hermiticityTest(psi1, psi2):
+def hermiticityTest(dim, N):
     """
     testing if the hamiltonian operator is hermitian.
 
@@ -49,19 +63,21 @@ def hermiticityTest(psi1, psi2):
     - True if hermitian, false if not
 
     """
+    psi1 = ndim_Random(dim, N)
+    psi2 = ndim_Random(dim, N)
 
     h_psi1 = hamiltonian(psi1)
 
     h_psi2 = hamiltonian(psi2)
 
-    leftSide = np.vdot((psi1, h_psi2))
+    leftSide = np.vdot(psi1, h_psi2)
 
-    rightSide = np.sum((h_psi1, psi2))
+    rightSide = np.vdot(h_psi1, psi2)
 
     return np.allclose(leftSide, rightSide)
 
 
-def positivityTest(psi):
+def positivityTest(dim, N):
     """
     testing if the hamiltonian is positive when the potential is positive
 
@@ -70,11 +86,25 @@ def positivityTest(psi):
     output parameters:
 
     """
+
+    psi = ndim_Random(dim, N)
+
     h_psi = hamiltonian(psi)
 
-    expValue =  np.vdot((psi, h_psi))
+    expValue =  np.vdot(psi, h_psi)
 
     return expValue >= 0
+
+
+def noPotentialHamiltonian(psi):
+
+    psi_2nd = derivative(psi)    
+
+    k_hat = kineticEnergy(psi)
+    # Calculate the hamiltonian
+    h_hat = k_hat*psi_2nd 
+    
+    return h_hat
 
 
 
@@ -89,26 +119,78 @@ def eigenvalueTest(dim, N):
 
     n = np.arange(N)
 
-    k = np.array(random.randint(-15, 15) for x in range(0,dim))
+    k = [random.randint(-15, 15) for x in range(0,dim)]
+    print("k :")
+    print(k)
 
     # Choose 1 value of k 
     k_prime = k[random.randint(0,dim)]
 
     # wave function with the chosen value of k 
-    psi = np.exp(2* np.pi * 1j * np.vdot(n, k_prime)/N)
+    psi = np.exp(2* np.pi * 1j * n*k_prime /N)
+
+    psi_2nd  = derivative(psi)
 
 
-    # Eigenvalue with the ghosen value of k
-    eigenvalue = 1/(2*mu*epsilon**2) * (4*(pi**2)*(k_prime**2))/(N**2) # potential = 0
+    # Eigenvalue with the chosen value of k
+    eigenvalue = 1/(2*mu*epsilon**2) * psi_2nd / psi # potential = 0
 
     rightSide = eigenvalue * psi
 
-    leftSide = hamiltonian(psi)
+    leftSide = noPotentialHamiltonian(psi)
 
     return np.allclose(leftSide, rightSide)
 
 
-def testProperties():
 
-    for i in range(0, 50):
-        eigenvalueTest(dim, N)
+
+def testLinearity(dim, N):
+    i = 0 
+    boo = True
+    while i < 50 and boo == True:
+        boo = linearityTest(dim, N)
+        i = i+1
+    print("LinearityTest :")
+    print(i)
+    print(boo)  
+
+
+def testHermiticity(dim, N):
+    i=0
+    boo = True
+    while i < 50 and boo == True:
+        boo = hermiticityTest(dim, N)
+        i = i+1
+    print("hermiticityTest :")
+    print(i)
+    print(boo)
+
+
+def testPositivity(dim, N):
+    i=0
+    boo = True
+    while i < 50 and boo == True:
+        boo = positivityTest(dim, N)
+        i=i+1
+    print("positivityTest :")
+    print(i)
+    print(boo)
+
+
+def testEigenvalue(dim, N):
+    i=0
+    boo = True
+    while i < 50 and boo == True:
+        boo = eigenvalueTest(dim, N)
+        i = i+1
+    print("eigenvalueTest :")
+    print(i)
+    print(boo)
+    return boo
+
+
+"""test1 = testLinearity(dim, N)
+test2 = testHermiticity(dim, N)
+test3 = testPositivity(dim, N)"""
+
+test4 = testEigenvalue(dim, N)
