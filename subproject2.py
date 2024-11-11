@@ -1,7 +1,7 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian, derivative, kineticEnergy
+from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator
 #from math import pi
 
 #######initializing variables######
@@ -144,13 +144,17 @@ def eigenvalueTest(dim, N):
     return np.allclose(leftSide, rightSide)
 
 
-def unitarityTest(psi, dim):
+def unitarityTest(dim, N):
     """
 
     """
-    
+    psi = ndim_Random(dim, N)
 
-    return
+    initialNorm = np.linalg.norm(psi)
+
+    transformedNorm = np.linalg.norm(strang_splitting_integrator(psi))
+
+    return np.allclose(initialNorm, transformedNorm)
 
 
 def testLinearity(dim, N):
@@ -196,11 +200,23 @@ def testEigenvalue(dim, N):
     print(i)
     print(boo)
 
+def testUnitarity(dim, N):
+    i=0
+    boo = True
+    while i < 50 and boo == True:
+        boo = unitarityTest(dim, N)
+        i = i+1
+    print("unitarityTest :")
+    print(i)
+    print(boo)
+
 
 test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
 test3 = testPositivity(dim, N)
-test4 = testEigenvalue(dim, N)"""
+test4 = testEigenvalue(dim, N)
+test5 = testUnitarity(dim, N)
+"""
 
 x = eigenvalueTest(dim,N)
-
+"""
