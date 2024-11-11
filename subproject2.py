@@ -8,7 +8,7 @@ from subproject1 import hamiltonian, derivative, kineticEnergy
 epsilon = 1
 mu = 1
 dim = 2
-N = 3
+N = 4
 tau_hat = 0.1
 ###########
 
@@ -123,21 +123,23 @@ def eigenvalueTest(dim, N):
     print("k :")
     print(k)
 
-    # Choose 1 value of k 
+
     k_prime = k[random.randint(0,dim)]
 
-    # wave function with the chosen value of k 
     psi = np.exp(2* np.pi * 1j * n*k_prime /N)
+    print("Psi : ", psi)
 
     psi_2nd  = derivative(psi)
+    print("psi_2nd : ",psi)
 
 
-    # Eigenvalue with the chosen value of k
-    eigenvalue = 1/(2*mu*epsilon**2) * psi_2nd / psi # potential = 0
+    eigenvalue = 1/(2*mu*epsilon**2) * psi_2nd / psi 
 
     rightSide = eigenvalue * psi
+    print("rightSide : ", rightSide)
 
     leftSide = noPotentialHamiltonian(psi)
+    print("leftSide : ", leftSide)
 
     return np.allclose(leftSide, rightSide)
 
@@ -193,11 +195,12 @@ def testEigenvalue(dim, N):
     print("eigenvalueTest :")
     print(i)
     print(boo)
-    return boo
 
 
 test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
 test3 = testPositivity(dim, N)
+test4 = testEigenvalue(dim, N)"""
 
-test4 = testEigenvalue(dim, N)
+x = eigenvalueTest(dim,N)
+
