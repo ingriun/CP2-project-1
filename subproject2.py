@@ -2,7 +2,7 @@
 import numpy as np
 import numpy.random as random
 from subproject1 import hamiltonian, derivative, kineticEnergy
-from math import pi
+#from math import pi
 
 #######initializing variables######
 epsilon = 1
@@ -142,6 +142,13 @@ def eigenvalueTest(dim, N):
     return np.allclose(leftSide, rightSide)
 
 
+def unitarityTest(psi, dim):
+    """
+
+    """
+    
+
+    return
 
 
 def testLinearity(dim, N):
@@ -189,8 +196,8 @@ def testEigenvalue(dim, N):
     return boo
 
 
-"""test1 = testLinearity(dim, N)
+test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
-test3 = testPositivity(dim, N)"""
+test3 = testPositivity(dim, N)
 
 test4 = testEigenvalue(dim, N)
