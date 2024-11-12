@@ -228,15 +228,14 @@ def testIntegrators(dim, N):
     print(i)
     print(boo)
 
-test1 = testIntegrators(dim, N)
 
-"""test1 = testLinearity(dim, N)
+test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
 test3 = testPositivity(dim, N)
-
-test5 = testUnitarity(dim, N)"""
+test4 = testEigenvalue(dim, N)
+test5 = testUnitarity(dim, N)
+test6 = testIntegrators(dim, N)
 """
 
 x = eigenvalueTest(dim,N)
 """
-#test4 = testEigenvalue(dim, N)
