@@ -1,12 +1,12 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator
-#from math import pi
+from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator
+from math import pi
 
 #######initializing variables######
-epsilon = 1
-mu = 1
+epsilon = 0.1
+mu = 0.02
 dim = 2
 N = 4
 tau_hat = 0.1
@@ -119,21 +119,18 @@ def eigenvalueTest(dim, N):
 
     n = np.arange(N)
 
-    k = [random.randint(-15, 15) for x in range(0,dim)]
+    k = [random.randint(-50, 50) for x in range(0,dim)]
     print("k :")
     print(k)
 
 
     k_prime = k[random.randint(0,dim)]
 
-    psi = np.exp(2* np.pi * 1j * n*k_prime /N)
+    psi = np.exp(2* pi * 1j * n*k_prime /N)
     print("Psi : ", psi)
 
-    psi_2nd  = derivative(psi)
-    print("psi_2nd : ",psi)
-
-
-    eigenvalue = 1/(2*mu*epsilon**2) * psi_2nd / psi 
+    eigenvalue = 1/(2*mu*epsilon**2) * (2*pi*k_prime/N)**2
+    print("Eigenvalue : ", eigenvalue)
 
     rightSide = eigenvalue * psi
     print("rightSide : ", rightSide)
@@ -211,12 +208,35 @@ def testUnitarity(dim, N):
     print(boo)
 
 
-test1 = testLinearity(dim, N)
+def testIntegrators(dim, N):
+    global tau_hat
+
+    psi = ndim_Random(dim, N)
+
+    i = 0
+    boo = True
+    while i < 15 and boo == True:
+        tau_hat = tau_hat/10
+
+        rightSide = second_order_integrator(psi)
+
+        leftSide = strang_splitting_integrator(psi)
+
+        i = i + 1
+        boo = np.allclose(rightSide, leftSide)
+
+    print(i)
+    print(boo)
+
+test1 = testIntegrators(dim, N)
+
+"""test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
 test3 = testPositivity(dim, N)
-test4 = testEigenvalue(dim, N)
-test5 = testUnitarity(dim, N)
+
+test5 = testUnitarity(dim, N)"""
 """
 
 x = eigenvalueTest(dim,N)
 """
+#test4 = testEigenvalue(dim, N)
