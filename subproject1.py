@@ -100,10 +100,9 @@ def strang_splitting_integrator(psi):
     eta_tilde = np.fft.fftn(eta)
 
     v_eta = potential(eta) #calculate potential
-    k_eta = hamiltonian(eta) - v_eta #calculate kinetic hamiltonian by removing the V part (setting V=0)
 
     # Define the Fourier space wave numbers
-    k = np.fft.fftfreq(N+1, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
+    k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
     k_mesh = np.meshgrid(*([k] * dim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of K_hat in Fourier space using the known formula
