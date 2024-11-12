@@ -126,10 +126,10 @@ def eigenvalueTest(dim, N):
 
     k_prime = k[random.randint(0,dim)]
 
-    psi = np.exp(2* pi * 1j * n*k_prime /N)
+    psi = np.exp(2* pi * 1j * n * k_prime / N)
     print("Psi : ", psi)
 
-    eigenvalue = 1/(2*mu*epsilon**2) * (2*pi*k_prime/N)**2
+    eigenvalue = (2/(mu*epsilon**2)) * np.sin(pi*k_prime/N)**2
     print("Eigenvalue : ", eigenvalue)
 
     rightSide = eigenvalue * psi
