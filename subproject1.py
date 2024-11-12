@@ -7,7 +7,7 @@ epsilon = 1
 mu = 1
 dim = 2
 N = 3
-tau_hat = 0.1
+tau_hat = 0.01
 ###########
 
 
@@ -87,9 +87,11 @@ def euler_integrator(psi): # add tau_hat in parameters?
 
 # Second-order Integrator
 def second_order_integrator(psi):   # add tau_hat in parameters?
+    global tau_hat
     return psi - 1j * tau_hat * hamiltonian(psi) - (tau_hat**2 / 2) * (hamiltonian(hamiltonian(psi)))
 
 def strang_splitting_integrator(psi):
+    global tau_hat
     # Split Hamiltonian into kinetic and potential parts
     v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
     
@@ -119,3 +121,6 @@ def strang_splitting_integrator(psi):
 
     # or xi = np.fft.ifftn(K_exp * eta_tilde)
     return v_half * xi
+
+
+bla = strang_splitting_integrator(psi)
