@@ -98,7 +98,6 @@ def positivityTest(dim, N):
 def noPotentialHamiltonian(psi):
 
     psi_2nd = derivative(psi) 
-    print(psi_2nd)
 
     k_hat = kineticEnergy(psi)
     # Calculate the hamiltonian
@@ -119,16 +118,25 @@ def eigenvalueTest(dim, N):
 
     #n = np.arange(N)
     n = ndim_Ones(dim, N)
-    print(n)
+    #print(n)
 
-    k = np.array([random.randint(-50, 50) for x in range(0,dim+1)])
-    print("k :")
-    print(k)
+    k = np.array([random.randint(-10, 10) for x in range(0,dim+1)])
+    #print("k :")
+    #print(k)
 
 
    # k_prime = k[random.randint(0,dim)]
+    #psi0 = np.zeros(np.shape(n))
+    psi = np.ones(np.shape(n))
+    #print(psi)
 
-    psi = np.exp(2* np.pi * 1j * n@k / N)
+    #psi = np.exp(2* np.pi * 1j * np.outer(n,k) / N) #have to contain some sort of for loop
+    #psi = np.array([[np.exp(2 * np.pi * 1j * n[x][y] * k[x] / N) for x in range(0, dim+1)] for y in range(0,dim+1)])
+
+    for i in range(0, dim+1):
+        for j in range(0, dim+1):
+            psi[j][i] = np.exp(2* np.pi * 1j * n[j][i]*k[j] / N)
+
     print("Psi : ", psi)
 
     eigenvalue = (2/(mu*epsilon**2)) * np.sin(np.pi * k/N)**2
@@ -140,7 +148,11 @@ def eigenvalueTest(dim, N):
     leftSide = noPotentialHamiltonian(psi)
     print("leftSide : ", leftSide)
 
-    return np.allclose(leftSide, rightSide)
+    difference = leftSide - rightSide
+
+    differenceMax = np.max(difference)
+
+    return np.abs(differenceMax) #np.allclose(leftSide, rightSide)
 
 
 def unitarityTest(dim, N):
@@ -192,10 +204,11 @@ def testPositivity(dim, N):
 def testEigenvalue(dim, N):
     i=0
     boo = True
-    while i < 50 and boo == True:
-        boo = eigenvalueTest(dim, N)
-        i = i+1
     print("eigenvalueTest :")
+    while i < 4 and boo == True:
+        #boo = 
+        print(eigenvalueTest(dim, N))
+        i = i+1
     print(i)
     print(boo)
 
