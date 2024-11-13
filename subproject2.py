@@ -225,6 +225,7 @@ def testIntegrators(dim, N):
         i = i + 1
         boo = np.allclose(rightSide, leftSide)
 
+    print("testIntegrators")
     print(i)
     print(boo)
 
