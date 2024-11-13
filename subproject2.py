@@ -1,14 +1,13 @@
 ##testing linearity
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator
-from math import pi
+from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones
 
 #######initializing variables######
 epsilon = 0.1
 mu = 0.02
 dim = 2
-N = 4
+N = 3
 tau_hat = 0.1
 ###########
 
@@ -98,7 +97,8 @@ def positivityTest(dim, N):
 
 def noPotentialHamiltonian(psi):
 
-    psi_2nd = derivative(psi)    
+    psi_2nd = derivative(psi) 
+    print(psi_2nd)
 
     k_hat = kineticEnergy(psi)
     # Calculate the hamiltonian
@@ -117,19 +117,21 @@ def eigenvalueTest(dim, N):
 
     """
 
-    n = np.arange(N)
+    #n = np.arange(N)
+    n = ndim_Ones(dim, N)
+    print(n)
 
-    k = [random.randint(-50, 50) for x in range(0,dim)]
+    k = np.array([random.randint(-50, 50) for x in range(0,dim+1)])
     print("k :")
     print(k)
 
 
-    k_prime = k[random.randint(0,dim)]
+   # k_prime = k[random.randint(0,dim)]
 
-    psi = np.exp(2* pi * 1j * n * k_prime / N)
+    psi = np.exp(2* np.pi * 1j * n@k / N)
     print("Psi : ", psi)
 
-    eigenvalue = (2/(mu*epsilon**2)) * np.sin(pi*k_prime/N)**2
+    eigenvalue = (2/(mu*epsilon**2)) * np.sin(np.pi * k/N)**2
     print("Eigenvalue : ", eigenvalue)
 
     rightSide = eigenvalue * psi
