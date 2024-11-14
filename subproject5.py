@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import random
+from subproject2 import ndim_Random
+from subproject1 import strang_splitting_integrator
 
 def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_integrator):
     # Initialize psi
