@@ -163,9 +163,30 @@ def unitarityTest(dim, N):
 
     initialNorm = np.linalg.norm(psi)
 
-    transformedNorm = np.linalg.norm(strang_splitting_integrator(psi))
+    transformedNorm = np.linalg.norm(strang_splitting_integrator(psi, tau_hat))
 
     return np.allclose(initialNorm, transformedNorm)
+
+
+def testIntegrators(dim, N, tau_hat):
+    
+    psi = ndim_Random(dim, N)
+    i = 0
+    while i < 50:
+        tau_hat = tau_hat/10
+
+        rightSide = second_order_integrator(psi, tau_hat)
+
+        leftSide = strang_splitting_integrator(psi, tau_hat)
+
+        divergence = np.abs(leftSide - rightSide)
+
+        div_max = np.linalg.norm(divergence)
+
+        i = i + 1
+
+        print(div_max)
+    tau_hat = 1
 
 
 def testLinearity(dim, N):
@@ -223,35 +244,9 @@ def testUnitarity(dim, N):
     print(boo)
 
 
-def testIntegrators(dim, N):
-    global tau_hat
-
-    psi = ndim_Random(dim, N)
-
-    i = 0
-    boo = True
-    while i < 15 and boo == True:
-        tau_hat = tau_hat/10
-
-        rightSide = second_order_integrator(psi)
-
-        leftSide = strang_splitting_integrator(psi)
-
-        i = i + 1
-        boo = np.allclose(rightSide, leftSide)
-
-    print("testIntegrators")
-    print(i)
-    print(boo)
-
-
 test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
 test3 = testPositivity(dim, N)
 test4 = testEigenvalue(dim, N)
 test5 = testUnitarity(dim, N)
-test6 = testIntegrators(dim, N)
-"""
-
-x = eigenvalueTest(dim,N)
-"""
+test6 = testIntegrators(dim, N, tau_hat)

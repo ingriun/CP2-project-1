@@ -86,12 +86,10 @@ def euler_integrator(psi): # add tau_hat in parameters?
     return psi - 1j * tau_hat * hamiltonian(psi)
 
 # Second-order Integrator
-def second_order_integrator(psi):   # add tau_hat in parameters?
-    global tau_hat
+def second_order_integrator(psi, tau_hat):   # add tau_hat in parameters?
     return psi - 1j * tau_hat * hamiltonian(psi) - (tau_hat**2 / 2) * (hamiltonian(hamiltonian(psi)))
 
-def strang_splitting_integrator(psi):
-    global tau_hat
+def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
     v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
     
@@ -101,7 +99,6 @@ def strang_splitting_integrator(psi):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-    v_eta = potential(eta) #calculate potential
 
     # Define the Fourier space wave numbers
     k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
@@ -123,4 +120,4 @@ def strang_splitting_integrator(psi):
     return v_half * xi
 
 
-bla = strang_splitting_integrator(psi)
+bla = strang_splitting_integrator(psi, tau_hat)
