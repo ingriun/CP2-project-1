@@ -5,8 +5,8 @@ from math import pi
 #######initializing variables######
 epsilon = 1
 mu = 1
-dim = 2
-N = 4
+dim = 1
+N = 100
 tau_hat = 0.01
 ###########
 
@@ -25,18 +25,18 @@ def ndim_Ones(dim, N):
 
 
 # Initialize psi
-psi = ndim_Ones(dim, N)
+#psi = ndim_Ones(dim, N)
 
 
 def derivative(psi):
     # Initialize psi_2nd to have the same shape as psi 
     psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) # Calculate psi_2nd
-
+    print(psi_2nd)
     return psi_2nd
 
-y = derivative(psi)
+"""y = derivative(psi)
 print("2nd-derivative :")
-print(y)
+print(y)"""
 
 def kineticEnergy(psi):
     array = np.ones(psi.shape)
@@ -45,9 +45,9 @@ def kineticEnergy(psi):
     return k_hat
 
 
-k = kineticEnergy(psi)
+"""k = kineticEnergy(psi)
 print("Kinetic Energy :")
-print(k)
+print(k)"""
 
 def potential(psi):
     # Initialize V_psi to have the same shape as psi
@@ -79,7 +79,7 @@ def hamiltonian(psi):
     
     return h_hat
 
-h = hamiltonian(psi)
+#h = hamiltonian(psi)
 
 # Euler Integrator
 def euler_integrator(psi): # add tau_hat in parameters?
@@ -120,4 +120,4 @@ def strang_splitting_integrator(psi, tau_hat):
     return v_half * xi
 
 
-bla = strang_splitting_integrator(psi, tau_hat)
+#bla = strang_splitting_integrator(psi, tau_hat)

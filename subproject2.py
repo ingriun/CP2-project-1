@@ -6,8 +6,8 @@ from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting
 #######initializing variables######
 epsilon = 0.1
 mu = 0.02
-dim = 2
-N = 4
+dim = 1
+N = 100
 tau_hat = 0.1
 ###########
 
