@@ -3,7 +3,7 @@ import matplotlib.animation as animation
 import numpy as np
 import random
 from subproject2 import ndim_Random
-from subproject1 import strang_splitting_integrator
+from subproject1 import strang_splitting_integrator, tau_hat
 
 def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_integrator):
     # Initialize psi
@@ -30,8 +30,8 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
         Update the wave function at each frame.
         """
         # Apply the integrator to evolve the wave function
-        global psi
-        psi = integrator(psi)
+        nonlocal psi
+        psi = integrator(psi, tau_hat)
         
         # Flatten psi 
         psi_flat = np.abs(psi.flatten())

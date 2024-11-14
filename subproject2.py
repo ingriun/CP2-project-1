@@ -7,7 +7,7 @@ from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting
 epsilon = 0.1
 mu = 0.02
 dim = 2
-N = 3
+N = 4
 tau_hat = 0.1
 ###########
 
@@ -244,9 +244,10 @@ def testUnitarity(dim, N):
     print(boo)
 
 
-test1 = testLinearity(dim, N)
+"""test1 = testLinearity(dim, N)
 test2 = testHermiticity(dim, N)
 test3 = testPositivity(dim, N)
 test4 = testEigenvalue(dim, N)
 test5 = testUnitarity(dim, N)
 test6 = testIntegrators(dim, N, tau_hat)
+"""

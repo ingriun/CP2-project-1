@@ -6,7 +6,7 @@ from math import pi
 epsilon = 1
 mu = 1
 dim = 2
-N = 3
+N = 4
 tau_hat = 0.01
 ###########
 
