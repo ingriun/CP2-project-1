@@ -4,11 +4,11 @@ import numpy.random as random
 from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones
 
 #######initializing variables######
-epsilon = 0.1
-mu = 0.02
-dim = 1
-N = 100
-tau_hat = 0.1
+epsilon = 1
+mu = 0.2
+dim = 2
+N = 50
+tau_hat = 1
 ###########
 
 def ndim_Random(dim, N):
@@ -19,7 +19,7 @@ def ndim_Random(dim, N):
     # tuple containing the shape of the lattice
     tuplet = tuple(list)
         
-    array = np.random.rand(*tuplet)
+    array = np.random.rand(*tuplet, dtype=complex)
     return array
 
 
@@ -116,42 +116,31 @@ def eigenvalueTest(dim, N):
 
     """
 
-    #n = np.arange(N)
-    n = ndim_Ones(dim, N)
-    #print(n)
+    k = np.array([random.randint(-10, 10) for x in range(0,dim)])
+    #print("k :", k)
 
-    k = np.array([random.randint(-10, 10) for x in range(0,dim+1)])
-    #print("k :")
-    #print(k)
-
-
-   # k_prime = k[random.randint(0,dim)]
-    #psi0 = np.zeros(np.shape(n))
-    psi = np.ones(np.shape(n))
+    psi = ndim_Ones(dim, N)
     #print(psi)
 
-    #psi = np.exp(2* np.pi * 1j * np.outer(n,k) / N) #have to contain some sort of for loop
-    #psi = np.array([[np.exp(2 * np.pi * 1j * n[x][y] * k[x] / N) for x in range(0, dim+1)] for y in range(0,dim+1)])
+    for index in np.ndindex(psi.shape):
+        psi[index] = np.exp(2 * np.pi * 1j * np.vdot(index,k) / N)
+    
+    #print("Psi :")
+    #print(psi)
 
-    for i in range(0, dim+1):
-        for j in range(0, dim+1):
-            psi[j][i] = np.exp(2* np.pi * 1j * n[j][i]*k[j] / N)
+    eigenvalue = (2/(mu*epsilon**2)) * (np.sin(np.pi * k/N))**2
+    #print("Eigenvalue : ", eigenvalue)
 
-    print("Psi : ", psi)
-
-    eigenvalue = (2/(mu*epsilon**2)) * np.sin(np.pi * k/N)**2
-    print("Eigenvalue : ", eigenvalue)
-
-    rightSide = eigenvalue * psi
-    print("rightSide : ", rightSide)
+    rightSide = np.sum(eigenvalue) * psi
+    #print("rightSide : ", rightSide)
 
     leftSide = noPotentialHamiltonian(psi)
-    print("leftSide : ", leftSide)
+    #print("leftSide : ", leftSide)
 
     difference = leftSide - rightSide
 
     differenceMax = np.max(difference)
-
+    #print("absolute difference : ")
     return np.abs(differenceMax) #np.allclose(leftSide, rightSide)
 
 
@@ -224,14 +213,10 @@ def testPositivity(dim, N):
 
 def testEigenvalue(dim, N):
     i=0
-    boo = True
     print("eigenvalueTest :")
-    while i < 4 and boo == True:
-        #boo = 
+    while i < 10:
         print(eigenvalueTest(dim, N))
         i = i+1
-    print(i)
-    print(boo)
 
 def testUnitarity(dim, N):
     i=0
@@ -251,3 +236,4 @@ test4 = testEigenvalue(dim, N)
 test5 = testUnitarity(dim, N)
 test6 = testIntegrators(dim, N, tau_hat)
 """
+test = testEigenvalue(dim, N)

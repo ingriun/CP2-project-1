@@ -1,13 +1,14 @@
 import numpy as np
 import numpy.random as random
 from math import pi
+import matplotlib.pyplot as plt 
 
 #######initializing variables######
 epsilon = 1
-mu = 1
+mu = 0.2
 dim = 1
-N = 100
-tau_hat = 0.01
+N = 101
+tau_hat = 1
 ###########
 
 
@@ -20,18 +21,27 @@ def ndim_Ones(dim, N):
     # tuple containing the shape of the lattice
     tuplet = tuple(list)
         
-    array = np.ones(tuplet)
+    array = np.ones(tuplet, dtype=complex)
     return array
 
+def ndim_Random(dim, N):
+
+
+    list = [N for x in range(0,dim)]
+    
+    # tuple containing the shape of the lattice
+    tuplet = tuple(list)
+        
+    array = random.rand(*tuplet)
+    return array
 
 # Initialize psi
-#psi = ndim_Ones(dim, N)
+psi = ndim_Random(dim, N)
 
 
 def derivative(psi):
     # Initialize psi_2nd to have the same shape as psi 
     psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) # Calculate psi_2nd
-    print(psi_2nd)
     return psi_2nd
 
 """y = derivative(psi)
@@ -47,23 +57,31 @@ def kineticEnergy(psi):
 
 """k = kineticEnergy(psi)
 print("Kinetic Energy :")
-print(k)"""
+print(k)
+"""
 
 def potential(psi):
-    # Initialize V_psi to have the same shape as psi
-    v_hat = np.zeros(psi.shape) 
 
-    # Number of point along an axis
-    N = list(psi.shape)[0]
+    ones = np.ones(psi.shape)
+    
+    N = psi.shape[0]
 
-    # Create an array of N-indices in 1 dimension
-    indices = np.arange(N)
+    coordinates_centered = np.linspace(N//2, -N//2 + 1, N)
 
-    # Calculate the potential
-    v_hat = mu/8*((epsilon**2 * indices**2 - 1)**2)
+    v_hat = coordinates_centered * ones
+
+    for index in np.ndindex(psi.shape):
+        v_hat[index] = mu/8*((epsilon**2 * v_hat[index]**2 - 1)**2)
+
+    a = psi.shape[0]
+    N = np.arange(a)
+    fig, ax = plt.subplots()
+    ax.plot(N,v_hat)
+    plt.show() 
 
     return v_hat
 
+v = potential(psi)
 
 
 
@@ -79,7 +97,7 @@ def hamiltonian(psi):
     
     return h_hat
 
-#h = hamiltonian(psi)
+h = hamiltonian(psi)
 
 # Euler Integrator
 def euler_integrator(psi): # add tau_hat in parameters?
