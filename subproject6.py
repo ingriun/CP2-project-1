@@ -1,17 +1,42 @@
-
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-from subproject2 import ndim_Random
-from subproject1 import tau_hat, ndim_Ones
+from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
 from subproject1 import N, mu, epsilon, tau_hat, dim
+
+# Gaussian potential function
+def gaussian_potential(psi, width=10, height=5, center=N//2):
+    """
+    Create a Gaussian potential barrier centered in the middle of the array.
+    Parameters:
+    - psi: Wavefunction to determine the grid size.
+    - width: Controls the width of the Gaussian barrier.
+    - height: Controls the height of the potential.
+    - center: The position of the center of the barrier.
+    
+    Returns:
+    - v_hat: The Gaussian potential array.
+    """
+    N = psi.shape[0]  # Get the grid size from the shape of the wavefunction
+    coordinates = np.linspace(-N//2, N//2, N)
+    
+    v_hat = height * np.exp(-0.5 * (coordinates**2 / width**2))  # Gaussian shape
+    
+    return v_hat
+
+# Hamiltonian with Gaussian potential
+def hamiltonian_with_gaussian_potential(psi):
+    psi_2nd = derivative(psi)
+    v_hat = gaussian_potential(psi)
+    k_hat = kineticEnergy(psi)
+    h_hat = k_hat*psi_2nd + v_hat * psi
+    return h_hat
 
 
 # Initialize the wavepacket
 def initialWavepacket(dim, N):
     x_positions = np.arange(N**dim)
     psi = ndim_Ones(dim, N)
-    #wavelenght = random.uniform(0.1 , 0.3)
     wavelength = 0.21
     print('wl: ', wavelength)
     k = 2*np.pi / wavelength
@@ -23,18 +48,6 @@ def initialWavepacket(dim, N):
 
     return x_positions, psi
 
-# Define the potential barrier
-def potential_barrier(dim, N):
-    barrier = np.zeros((N**dim,))
-    x_positions = np.linspace(0, 1, N**dim)
-
-    # Place the barrier in the middle of the domain
-    center = 0.5
-    width = 0.05
-    height = 5  # Barrier height
-    barrier = height * np.exp(-((x_positions - center) / width) ** 2)  # Gaussian barrier
-
-    return barrier
 
 def strang_splitting_integrator(psi, tau_hat, potential):
     # Split Hamiltonian into kinetic and potential parts
@@ -43,9 +56,8 @@ def strang_splitting_integrator(psi, tau_hat, potential):
     # Apply potential
     eta = v_half * psi
 
-    #fourier transform to momentum space
+    # Fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
-
 
     # Define the Fourier space wave numbers
     k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
@@ -60,20 +72,22 @@ def strang_splitting_integrator(psi, tau_hat, potential):
 
     k_exp = kinetic_evolution_operator(tau_hat)
 
-    #apply kinetic part
-    xi = np.fft.ifftn(k_exp * eta_tilde) #transform back to position space
+    # Apply kinetic part
+    xi = np.fft.ifftn(k_exp * eta_tilde)  # Transform back to position space
 
     return v_half * xi
 
 # Animate the wavefunction with tunneling
 def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_splitting_integrator):
     x_positions, psi = initialWavepacket(dim, N)
-    potential = potential_barrier(dim, N)
 
     fig, ax = plt.subplots(figsize=(8, 6))
     
     # Time steps to animate
     times = np.arange(num_frames)
+
+    # Create the potential based on the wavefunction
+    potential = gaussian_potential(psi)  # Now passing psi to the potential function
 
     # Plot the potential barrier
     ax.plot(x_positions, potential, 'r--', label="Potential Barrier")
@@ -81,7 +95,7 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
     # Plot the wavefunction
     line, = ax.plot(x_positions, np.abs(psi.flatten()), 'lightgrey', label="Magnitude |Ψ|")
     ax.set_ylim(0, 6)  # Adjust for the barrier's height
-    ax.set_xlim(0,100)
+    ax.set_xlim(0, 100)
     ax.set_title("Wavepacket Tunneling through a Barrier")
     ax.set_xlabel("Position")
     ax.set_ylabel("Magnitude of Wave Function")
@@ -93,7 +107,7 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
         """
         nonlocal psi
         # Add potential effect into the integrator
-        psi = integrator(psi, tau_hat, potential)  # Modified integrator to include potential
+        psi = integrator(psi, tau_hat, gaussian_potential)  # Pass gaussian_potential directly
 
         # Update the plot
         psi_flat = (psi.flatten())
