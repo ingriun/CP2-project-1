@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
+from subproject1 import hamiltonian, laplacian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
 from subproject1 import N, mu, epsilon, tau_hat, dim
 
 
@@ -81,7 +81,7 @@ def noPotentialHamiltonian(psi):
     """ hamiltonian without potential part,
         only used in eigenvalueTest"""
 
-    psi_2nd = derivative(psi) 
+    psi_2nd = laplacian(psi) 
 
     k_hat = kineticEnergy(psi)
 

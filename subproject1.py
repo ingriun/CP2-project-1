@@ -42,7 +42,7 @@ def ndim_Random(dim, N):
 ################# hamiltonian function ##################
 
 
-def derivative(psi):
+def laplacian(psi):
     # Boundary conditions inherent to np.roll
     psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) 
     return psi_2nd
@@ -73,7 +73,7 @@ def potential(psi):
 
 def hamiltonian(psi):
 
-    psi_2nd = derivative(psi)    
+    psi_2nd = laplacian(psi)    
 
     v_hat = potential(psi)
 
@@ -98,7 +98,7 @@ def second_order_integrator(psi, tau_hat):
 
 def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
-    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
+    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi)) 
     
     # Apply potential
     eta = v_half * psi
