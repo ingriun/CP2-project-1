@@ -70,11 +70,12 @@ def potential(psi):
     N = np.arange(a)
     fig, ax = plt.subplots()
     ax.plot(N,v_hat)
-    plt.show() 
+    plt.show()
 
     return v_hat
 
 v = potential(psi)
+print(v)
 
 
 

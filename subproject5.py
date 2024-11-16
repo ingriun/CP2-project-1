@@ -5,11 +5,34 @@ import random
 from subproject2 import ndim_Random
 from subproject1 import strang_splitting_integrator, tau_hat, ndim_Ones
 
+def initialWavepacket(dim, N):
+    x_positions = np.arange(N**dim)
+    psi = ndim_Ones(dim, N)
+    wavelenght = random.uniform(0, 5)
+    k = 2*np.pi / wavelenght
+    A = 1
+    B = 2
+    c = 3 * 10**8
+    for index in np.ndindex(psi.shape):
+        psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
+
+    print(psi)
+    return x_positions, psi
+
+
+x_positions, psi = initialWavepacket(dim = 1, N = 100)
+fig, ax = plt.subplots(figsize=(8, 6))
+line, = ax.plot(x_positions, (psi.flatten()), label="Magnitude |Ψ|")
+#ax.set_ylim(0, 1)
+ax.set_title("Time Evolution of the Wave Function")
+ax.set_xlabel("Position")
+ax.set_ylabel("Magnitude of Wave Function")
+plt.show()
+
 def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_integrator):
     # Initialize psi
-    psi = ndim_Random(dim, N)
+    psi = initialWavepacket(dim, N)
     #psi = ndim_Ones(dim, N)
-    
 
     fig, ax = plt.subplots(figsize=(8, 6))
     
@@ -48,4 +71,4 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     plt.show()
 
 # Example usage:
-animate_wave_function(dim=1, N=100, num_frames=1000, integrator=strang_splitting_integrator)
+#animate_wave_function(dim=1, N=100, num_frames=1000, integrator=strang_splitting_integrator)
