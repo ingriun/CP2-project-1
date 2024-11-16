@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 from subproject2 import ndim_Random
-from subproject1 import strang_splitting_integrator, tau_hat, ndim_Ones
+from subproject1 import tau_hat, ndim_Ones
 from subproject1 import N, mu, epsilon, tau_hat, dim
+
 
 # Initialize the wavepacket
 def initialWavepacket(dim, N):
@@ -34,6 +35,35 @@ def potential_barrier(dim, N):
     barrier = height * np.exp(-((x_positions - center) / width) ** 2)  # Gaussian barrier
 
     return barrier
+
+def strang_splitting_integrator(psi, tau_hat, potential):
+    # Split Hamiltonian into kinetic and potential parts
+    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
+    
+    # Apply potential
+    eta = v_half * psi
+
+    #fourier transform to momentum space
+    eta_tilde = np.fft.fftn(eta)
+
+
+    # Define the Fourier space wave numbers
+    k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
+    k_mesh = np.meshgrid(*([k] * dim), indexing='ij')  # Create a meshgrid for each dimension
+
+    # Calculate eigenvalues of k_hat in Fourier space using the known formula
+    k_eigenvalues = sum((2 / (mu * epsilon**2)) * np.sin(k_dim / 2)**2 for k_dim in k_mesh)
+
+    # Define the kinetic evolution operator in Fourier space
+    def kinetic_evolution_operator(tau_hat):
+        return np.exp(-1j * tau_hat * k_eigenvalues)
+
+    k_exp = kinetic_evolution_operator(tau_hat)
+
+    #apply kinetic part
+    xi = np.fft.ifftn(k_exp * eta_tilde) #transform back to position space
+
+    return v_half * xi
 
 # Animate the wavefunction with tunneling
 def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_splitting_integrator):
