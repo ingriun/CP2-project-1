@@ -2,14 +2,7 @@
 import numpy as np
 import numpy.random as random
 from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones
-
-#######initializing variables######
-epsilon = 1
-mu = 0.2
-dim = 2
-N = 50
-tau_hat = 1
-###########
+from subproject1 import N, mu, epsilon, tau_hat, dim
 
 def ndim_Random(dim, N):
 

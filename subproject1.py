@@ -44,9 +44,6 @@ def derivative(psi):
     psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) # Calculate psi_2nd
     return psi_2nd
 
-"""y = derivative(psi)
-print("2nd-derivative :")
-print(y)"""
 
 def kineticEnergy(psi):
     array = np.ones(psi.shape)
@@ -55,10 +52,6 @@ def kineticEnergy(psi):
     return k_hat
 
 
-"""k = kineticEnergy(psi)
-print("Kinetic Energy :")
-print(k)
-"""
 
 def potential(psi):
 
