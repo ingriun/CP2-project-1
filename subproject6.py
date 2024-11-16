@@ -31,7 +31,7 @@ def potential_barrier(dim, N):
     # Place the barrier in the middle of the domain
     center = 0.5
     width = 0.05
-    height = 2  # Barrier height
+    height = 5  # Barrier height
     barrier = height * np.exp(-((x_positions - center) / width) ** 2)  # Gaussian barrier
 
     return barrier
@@ -80,7 +80,8 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
 
     # Plot the wavefunction
     line, = ax.plot(x_positions, np.abs(psi.flatten()), 'lightgrey', label="Magnitude |Ψ|")
-    ax.set_ylim(0, 12)  # Adjust for the barrier's height
+    ax.set_ylim(0, 6)  # Adjust for the barrier's height
+    ax.set_xlim(0,100)
     ax.set_title("Wavepacket Tunneling through a Barrier")
     ax.set_xlabel("Position")
     ax.set_ylabel("Magnitude of Wave Function")
