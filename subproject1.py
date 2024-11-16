@@ -4,10 +4,10 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-epsilon = 1
+N = 99
+epsilon = 0.03*101/N
 mu = 0.2
 dim = 1
-N = 101
 tau_hat = 1
 ###########
 
@@ -66,11 +66,11 @@ def potential(psi):
     for index in np.ndindex(psi.shape):
         v_hat[index] = mu/8*((epsilon**2 * v_hat[index]**2 - 1)**2)
 
-    a = psi.shape[0]
+    """a = psi.shape[0]
     N = np.arange(a)
     fig, ax = plt.subplots()
     ax.plot(N,v_hat)
-    plt.show()
+    plt.show()"""
 
     return v_hat
 

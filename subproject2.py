@@ -12,7 +12,8 @@ def ndim_Random(dim, N):
     # tuple containing the shape of the lattice
     tuplet = tuple(list)
         
-    array = np.random.rand(*tuplet, dtype=complex)
+    #array = np.random.rand(*tuplet, dtype=complex)
+    array = np.random.rand(*tuplet)
     return array
 
 
