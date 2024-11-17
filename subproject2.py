@@ -203,6 +203,28 @@ def testPositivity(dim, N):
     print(boo)
 
 
+# On Second order & Strang-Splitting integrators
+
+def testLinearityIntegrators(dim, N, tau_hat):
+    i = 0 
+    boo = True
+    while i < 50 and boo == True:
+        boo = linearityIntegrators(dim, N, second_order_integrator)
+        i = i+1
+    print("LinearityTest for Second-Order integrator:")
+    print(i)
+    print(boo)  
+    i = 0 
+    boo = True
+    while i < 50 and boo == True:
+        boo = linearityIntegrators(dim, N, strang_splitting_integrator)
+        i = i+1
+    print("LinearityTest for Strang-Splitting integrator:")
+    print(i)
+    print(boo)  
+
+
+
 # On Strang-Splitting integrator 
 
 def testUnitarity(dim, N):
@@ -230,24 +252,6 @@ def testEigenvalue(dim, N):
 
 
 # On Second order & Strang-Splitting integrators
-
-def testLinearityIntegrators(dim, N, tau_hat):
-    i = 0 
-    boo = True
-    while i < 50 and boo == True:
-        boo = linearityIntegrators(dim, N, second_order_integrator)
-        i = i+1
-    print("LinearityTest for Second-Order integrator:")
-    print(i)
-    print(boo)  
-    i = 0 
-    boo = True
-    while i < 50 and boo == True:
-        boo = linearityIntegrators(dim, N, strang_splitting_integrator)
-        i = i+1
-    print("LinearityTest for Strang-Splitting integrator:")
-    print(i)
-    print(boo)  
 
 
 def testIntegrators(dim, N, tau_hat):
