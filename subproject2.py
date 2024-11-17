@@ -123,6 +123,30 @@ def eigenvalueTest(dim, N):
 
     return np.abs(differenceMax) 
 
+def linearityIntegrators(dim, N, integrator):
+    """
+    Testing linearity of the integrators
+
+    Wave functions are random in each iteration
+
+    Output:
+    - True if linear, False if not
+
+    """
+    a = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
+    b = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
+
+    psi1 = ndim_Random(dim, N)
+    psi2 = ndim_Random(dim, N)
+
+    psiLeft = a * psi1 + b * psi2
+
+    leftSide = hamiltonian(psiLeft)
+
+    rightSide = hamiltonian(a*psi1) + hamiltonian(b*psi2)
+
+    return np.allclose(leftSide, rightSide)
+
 
 def unitarityTest(dim, N):
     """
@@ -207,6 +231,25 @@ def testEigenvalue(dim, N):
 
 # On Second order & Strang-Splitting integrators
 
+def testLinearityIntegrators(dim, N, tau_hat):
+    i = 0 
+    boo = True
+    while i < 50 and boo == True:
+        boo = linearityIntegrators(dim, N, second_order_integrator)
+        i = i+1
+    print("LinearityTest for Second-Order integrator:")
+    print(i)
+    print(boo)  
+    i = 0 
+    boo = True
+    while i < 50 and boo == True:
+        boo = linearityIntegrators(dim, N, strang_splitting_integrator)
+        i = i+1
+    print("LinearityTest for Strang-Splitting integrator:")
+    print(i)
+    print(boo)  
+
+
 def testIntegrators(dim, N, tau_hat):
 
     psi = ndim_Random(dim, N)
@@ -238,3 +281,4 @@ test3 = testPositivity(dim, N)
 test4 = testEigenvalue(dim, N)
 test5 = testUnitarity(dim, N)
 test6 = testIntegrators(dim, N, tau_hat)
+test7 = testLinearityIntegrators(dim, N, tau_hat)
