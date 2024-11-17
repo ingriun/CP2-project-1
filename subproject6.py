@@ -50,9 +50,9 @@ def initialWavepacket(dim, N):
     return x_positions, psi
 
 
-def strang_splitting_integrator(psi, tau_hat, potential):
+def strang_splitting_integrator(psi, tau_hat, gaussian_potential):
     # Split Hamiltonian into kinetic and potential parts
-    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi))  # e^(-i*tau_hat/2 * V)
+    v_half = np.exp(-1j * (tau_hat / 2) * gaussian_potential(psi))  # e^(-i*tau_hat/2 * V)
     
     # Apply potential
     eta = v_half * psi
@@ -120,4 +120,4 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
     plt.show()
 
 # Example usage:
-animate_wave_function_tunneling(dim=1, N=101, num_frames=1000, integrator=strang_splitting_integrator)
+animate_wave_function_tunneling(dim=1, N=201, num_frames=1000, integrator=strang_splitting_integrator)
