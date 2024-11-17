@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-from subproject1 import hamiltonian, derivative, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
+from subproject1 import hamiltonian, laplacian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
 from subproject1 import N, mu, epsilon, tau_hat, dim
 
 # Gaussian potential function
@@ -26,7 +26,7 @@ def gaussian_potential(psi, width=10, height=5, center=N//2):
 
 # Hamiltonian with Gaussian potential
 def hamiltonian_with_gaussian_potential(psi):
-    psi_2nd = derivative(psi)
+    psi_2nd = laplacian(psi)
     v_hat = gaussian_potential(psi)
     k_hat = kineticEnergy(psi)
     h_hat = k_hat*psi_2nd + v_hat * psi
@@ -119,4 +119,4 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
     plt.show()
 
 # Example usage:
-animate_wave_function_tunneling(dim=1, N=100, num_frames=1000, integrator=strang_splitting_integrator)
+animate_wave_function_tunneling(dim=1, N=101, num_frames=1000, integrator=strang_splitting_integrator)
