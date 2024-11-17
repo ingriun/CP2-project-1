@@ -11,10 +11,11 @@ def initialWavepacket(dim, N):
     psi = ndim_Ones(dim, N)
     #wavelenght = random.uniform(0.1 , 0.3)
     wavelength = 0.22
+    L = N
     print('wl: ', wavelength)
     k = 2*np.pi / wavelength
-    A = 1
-    B = 2
+    A = 1 / np.sqrt(2 * L)
+    B = A
     c = 3 * 10**8
     for index in np.ndindex(psi.shape):
         psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
