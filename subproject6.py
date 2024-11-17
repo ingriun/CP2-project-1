@@ -5,7 +5,7 @@ from subproject1 import hamiltonian, laplacian, kineticEnergy, strang_splitting_
 from subproject1 import N, mu, epsilon, tau_hat, dim
 
 # Gaussian potential function
-def gaussian_potential(psi, width=10, height=5, center=N//2):
+def gaussian_potential(psi, width=8, height=10, center=N//2, shift=2.5):
     """
     Create a Gaussian potential barrier centered in the middle of the array.
     Parameters:
@@ -21,8 +21,9 @@ def gaussian_potential(psi, width=10, height=5, center=N//2):
     coordinates = np.linspace(-N//2, N//2, N)
     
     v_hat = height * np.exp(-0.5 * (coordinates**2 / width**2))  # Gaussian shape
+    v_hat1 = v_hat - shift
     
-    return v_hat
+    return v_hat1
 
 # Hamiltonian with Gaussian potential
 def hamiltonian_with_gaussian_potential(psi):
@@ -41,7 +42,7 @@ def initialWavepacket(dim, N):
     print('wl: ', wavelength)
     k = 2*np.pi / wavelength
     A = 1
-    B = 2
+    B = 0.5
     c = 3 * 10**8
     for index in np.ndindex(psi.shape):
         psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
@@ -94,7 +95,7 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
 
     # Plot the wavefunction
     line, = ax.plot(x_positions, np.abs(psi.flatten()), 'lightgrey', label="Magnitude |Ψ|")
-    ax.set_ylim(0, 6)  # Adjust for the barrier's height
+    ax.set_ylim(-4, 6)  # Adjust for the barrier's height
     ax.set_xlim(0, 100)
     ax.set_title("Wavepacket Tunneling through a Barrier")
     ax.set_xlabel("Position")
