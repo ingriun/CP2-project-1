@@ -44,8 +44,14 @@ def initialWavepacket(dim, N):
     A = 1
     B = 0.5
     c = 3 * 10**8
+    """center = N**dim // 5  # Center of the Gaussian envelope
+    width = N**dim / 20   # Width of the Gaussian envelope (adjust as needed)"""
     for index in np.ndindex(psi.shape):
         psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
+    """for index in np.ndindex(psi.shape):
+        x = x_positions[index]  # Current position
+        envelope = np.exp(-((x - center)**2) / (2 * width**2))  # Gaussian envelope
+        psi[index] = A * envelope * np.exp(1j * k * x)  # Wave with Gaussian envelope"""
 
     return x_positions, psi
 

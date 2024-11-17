@@ -45,12 +45,13 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     #x_positions = np.arange(N**dim)  # Flattened 1D array of positions corresponding to psi
     
     # The plot will show the magnitude of psi at each step
-    line, = ax.plot(x_positions, (psi.flatten()), 'lightgrey', label="Magnitude |Ψ|")
+    line, = ax.plot(x_positions, (psi.flatten()), 'lightgrey', label="Initial Ψ")
     ax.set_ylim(-5, 5)
     ax.set_xlim(0,100)
     ax.set_title("Time Evolution of the Wave Function")
     ax.set_xlabel("Position")
     ax.set_ylabel("Magnitude of Wave Function")
+    ax.legend()
     
     
     def update_frame(frame):
