@@ -3,14 +3,14 @@ import matplotlib.animation as animation
 import numpy as np
 import random
 from subproject2 import ndim_Random
-from subproject1 import strang_splitting_integrator, tau_hat, ndim_Ones
+from subproject1 import strang_splitting_integrator, tau_hat, ndim_Ones, potential
 from subproject1 import N, mu, epsilon, tau_hat, dim
 
 def initialWavepacket(dim, N):
     x_positions = np.arange(N**dim)
     psi = ndim_Ones(dim, N)
     #wavelenght = random.uniform(0.1 , 0.3)
-    wavelength = 0.22
+    wavelength = 20
     L = N
     print('wl: ', wavelength)
     k = 2*np.pi / wavelength
@@ -23,14 +23,6 @@ def initialWavepacket(dim, N):
     return x_positions, psi
 
 
-"""x_positions, psi = initialWavepacket(dim = 1, N = 100)
-fig, ax = plt.subplots(figsize=(8, 6))
-line, = ax.plot(x_positions, (psi.flatten()), label="Magnitude |Ψ|")
-#ax.set_ylim(0, 1)
-ax.set_title("Time Evolution of the Wave Function")
-ax.set_xlabel("Position")
-ax.set_ylabel("Magnitude of Wave Function")
-plt.show()"""
 
 def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_integrator):
     # Initialize psi
@@ -51,7 +43,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     ax.set_xlim(0,100)
     ax.set_title("Time Evolution of the Wave Function")
     ax.set_xlabel("Position")
-    ax.set_ylabel("Magnitude of Wave Function")
+    ax.set_ylabel("Ψ")
     ax.legend()
     
     
@@ -76,6 +68,8 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     
     plt.show()
 
+
 # Example usage:
 animate_wave_function(dim, N, num_frames=1000, integrator=strang_splitting_integrator)
+
 
