@@ -108,7 +108,7 @@ def strang_splitting_integrator(psi, tau_hat):
 
 
     # Define the Fourier space wave numbers
-    k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled
+    k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled by 2π
     k_mesh = np.meshgrid(*([k] * dim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
