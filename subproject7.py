@@ -33,7 +33,7 @@ def power_method(Q, tol=1e-6, max_iter=10000):
         #normalise w to |w| = 1
         w = w/np.linalg.norm(w)
 
-        #approximate the eigenvalue
+        #approximate the largest eigenvalue
         eigenvalue_new = np.vdot(w, Q(w)).real #using Hermiticity of Q
 
         #check for convergence
