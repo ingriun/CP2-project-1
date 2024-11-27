@@ -4,10 +4,10 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 101
+N = 51
 epsilon = 0.03*101 / N
 mu = 1
-dim = 1
+dim = 3
 tau_hat = 0.1
 ##################################
 
@@ -34,7 +34,7 @@ def ndim_Random(dim, N):
     tuplet = tuple(list)
     
     # Create lattice array w/ complex numbers
-    array = np.random.random(*tuplet).astype(complex)
+    array = np.random.random(tuplet).astype(complex)
     return array
 
 
