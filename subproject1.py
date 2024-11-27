@@ -65,11 +65,7 @@ def potential(psi):
     # Compute radial distance from the center
     r = np.sqrt(sum(g**2 for g in grids))
     
-    #v_hat = mu / 8 * ((epsilon**2 * r**2 - 1)**2)
-    v_hat = np.ones(psi.shape)
-
-    for index in np.ndindex(psi.shape):
-        v_hat[index] = mu/8*((epsilon**2 * r[index]**2 - 1)**2)
+    v_hat = mu / 8 * ((epsilon**2 * r**2 - 1)**2)
 
     return v_hat
 
