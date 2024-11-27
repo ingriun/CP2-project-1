@@ -4,10 +4,10 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 51
+N = 101
 epsilon = 0.03*101 / N
 mu = 1
-dim = 3
+dim = 2
 tau_hat = 0.1
 ##################################
 
@@ -54,19 +54,22 @@ def kineticEnergy(psi):
     return k_hat
 
 
-def potential(psi):
-
-    ones = np.ones(psi.shape)
-    
+def potential(psi):    
     N = psi.shape[0]
 
     # Potential centered in 0 to obtain the double-well property
-    coordinates_centered = np.linspace(N//2, -N//2 + 1, N)
+    coordinates_centered = [np.linspace(-N//2+1, N//2 , N) for dim in psi.shape]
 
-    v_hat = coordinates_centered * ones
+    grids = np.meshgrid(*coordinates_centered, indexing="ij")
+    
+    # Compute radial distance from the center
+    r = np.sqrt(sum(g**2 for g in grids))
+    
+    #v_hat = mu / 8 * ((epsilon**2 * r**2 - 1)**2)
+    v_hat = np.ones(psi.shape)
 
     for index in np.ndindex(psi.shape):
-        v_hat[index] = mu/8*((epsilon**2 * v_hat[index]**2 - 1)**2)
+        v_hat[index] = mu/8*((epsilon**2 * r[index]**2 - 1)**2)
 
     return v_hat
 
