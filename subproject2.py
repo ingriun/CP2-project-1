@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.random as random
 from subproject1 import hamiltonian, laplacian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
-from subproject1 import N, mu, epsilon, tau_hat, dim, v_hat
+from subproject1 import N, mu, epsilon, tau_hat, dim
 
 
 ########################## test functions ###########################
@@ -232,14 +232,6 @@ def testHermiticity():
             i = i+1
         print("dim = ",d," : ", boo)  
 
-    print("For different value of N")
-    for n in [15, 55, 91]:
-        i = 0 
-        boo = True
-        while i < 50 and boo == True:
-            boo = hermiticityTest(2, n)
-            i = i+1
-        print("N = ",n," : ", boo) 
 
 
 def testPositivity():
@@ -369,18 +361,19 @@ def testIntegrators():
     for d in range(1,5):
         print("dim = ",d," : ")
 
-        tau_hat = 1
-        for n in range(3):
+        tau_hat = 0.1
+        for n in range(4):
+            tau_hat = tau_hat/10
             print("tau_hat = ", tau_hat, " :")
             print("---> Divergence : ")
             psi = ndim_Random(d, 5)
-            rightSide, leftSide = psi
+            rightSide = psi
+            leftSide = psi
 
-            for m in range(0,1,tau_hat):
+            for m in np.arange(0,1,tau_hat):
                 rightSide = second_order_integrator(rightSide, tau_hat)
                 leftSide = strang_splitting_integrator(leftSide, tau_hat)
-                
-            
+                          
             divergence = np.abs(leftSide - rightSide)
             div_max = np.linalg.norm(divergence)        
 
