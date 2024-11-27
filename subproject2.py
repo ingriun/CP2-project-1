@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.random as random
 from subproject1 import hamiltonian, laplacian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
-from subproject1 import N, mu, epsilon, tau_hat, dim
+from subproject1 import N, mu, epsilon, tau_hat, dim, v_hat
 
 
 ########################## test functions ###########################
@@ -123,9 +123,10 @@ def eigenvalueTest(dim, N):
 
     return np.abs(differenceMax) 
 
-def linearityIntegrators(dim, N, integrator):
+
+def second_orderLinearity(dim, N, tau_hat):
     """
-    Testing linearity of the integrators
+    Testing linearity of the second order integrator
 
     Wave functions are random in each iteration
 
@@ -141,21 +142,48 @@ def linearityIntegrators(dim, N, integrator):
 
     psiLeft = a * psi1 + b * psi2
 
-    leftSide = hamiltonian(psiLeft)
+    leftSide = second_order_integrator(psiLeft, tau_hat)
 
-    rightSide = hamiltonian(a*psi1) + hamiltonian(b*psi2)
+    rightSide = second_order_integrator(a*psi1, tau_hat) + second_order_integrator(b*psi2, tau_hat)
 
     return np.allclose(leftSide, rightSide)
 
 
-def unitarityTest(dim, N):
+def strang_splittingLinearity(dim, N, tau_hat):
+    """
+    Testing linearity of the strang-splitting integrator
+
+    Wave functions are random in each iteration
+
+    Output:
+    - True if linear, False if not
+
+    """
+    a = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
+    b = random.uniform(-50, 50) + 1j * random.uniform(-50, 50)
+
+    psi1 = ndim_Random(dim, N)
+    psi2 = ndim_Random(dim, N)
+
+    psiLeft = a * psi1 + b * psi2
+
+    leftSide = strang_splitting_integrator(psiLeft, tau_hat)
+
+    rightSide = strang_splitting_integrator(a*psi1, tau_hat) + strang_splitting_integrator(b*psi2, tau_hat)
+
+    return np.allclose(leftSide, rightSide)
+
+
+def unitarityTest(dim, N, tau_hat):
     """
     Test the unitarity of the Strang-Splitting integrator
     - norm of psi should be equal to norm of integrator applied to psi
 
     Output:
     - True if yes, false if not
+
     """
+    
     psi = ndim_Random(dim, N)
 
     initialNorm = np.linalg.norm(psi)
@@ -170,72 +198,139 @@ def unitarityTest(dim, N):
 
 # On Hamiltonian
 
-def testLinearity(dim, N):
-    i = 0 
-    boo = True
-    while i < 50 and boo == True:
-        boo = linearityTest(dim, N)
-        i = i+1
-    print("LinearityTest :")
-    print(i)
-    print(boo)  
+def testLinearity():
+    print("---LinearityTest--- \n")
+
+    print("For different number of dimension :")
+    for d in range(1,5):
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = linearityTest(d, 5)
+            i = i+1
+        print("dim = ",d," : ", boo)  
+    
+    print("For different value of N")
+    for n in [15, 55, 91]:
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = linearityTest(2, n)
+            i = i+1
+        print("N = ",n," : ", boo) 
 
 
-def testHermiticity(dim, N):
-    i=0
-    boo = True
-    while i < 50 and boo == True:
-        boo = hermiticityTest(dim, N)
-        i = i+1
-    print("hermiticityTest :")
-    print(i)
-    print(boo)
+def testHermiticity():
+    print("---hermiticityTest--- \n")
+
+    print("For different number of dimension :")
+    for d in range(1,5):
+        i=0
+        boo = True
+        while i < 50 and boo == True:
+            boo = hermiticityTest(d, 5)
+            i = i+1
+        print("dim = ",d," : ", boo)  
+
+    print("For different value of N")
+    for n in [15, 55, 91]:
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = hermiticityTest(2, n)
+            i = i+1
+        print("N = ",n," : ", boo) 
 
 
-def testPositivity(dim, N):
-    i=0
-    boo = True
-    while i < 50 and boo == True:
-        boo = positivityTest(dim, N)
-        i=i+1
-    print("positivityTest :")
-    print(i)
-    print(boo)
+def testPositivity():
+    print("---positivityTest--- \n")
+
+    print("For different number of dimension :")
+    for d in range(1,5):
+        i=0
+        boo = True
+        while i < 50 and boo == True:
+            boo = positivityTest(d, 5)
+            i=i+1
+        print("dim = ",d," : ", boo)  
+
+    print("For different value of N")
+    for n in [15, 55, 91]:
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = positivityTest(2, n)
+            i = i+1
+        print("N = ",n," : ", boo) 
 
 
 # On Second order & Strang-Splitting integrators
 
-def testLinearityIntegrators(dim, N, tau_hat):
-    i = 0 
-    boo = True
-    while i < 50 and boo == True:
-        boo = linearityIntegrators(dim, N, second_order_integrator)
-        i = i+1
-    print("LinearityTest for Second-Order integrator:")
-    print(i)
-    print(boo)  
-    i = 0 
-    boo = True
-    while i < 50 and boo == True:
-        boo = linearityIntegrators(dim, N, strang_splitting_integrator)
-        i = i+1
-    print("LinearityTest for Strang-Splitting integrator:")
-    print(i)
-    print(boo)  
+def testLinearityIntegrators():
+    print("---LinearityTest for Second-Order integrator--- \n")
 
+    print("For different number of dimension :")
+    for d in range(1,5):
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = second_orderLinearity(d, 5, tau_hat=1.3)
+            i = i+1
+        print("dim = ",d," : ", boo) 
+    
+    print("For different value of N")
+    for n in [15, 55, 91]:
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = second_orderLinearity(2, n, tau_hat=1.3)
+            i = i+1
+        print("N = ",n," : ", boo)
+
+
+    print("\n ---LinearityTest for Strang-Splitting integrator--- \n")
+
+    print("For different number of dimension :")
+    for d in range(1,5):
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = strang_splittingLinearity(d, 5, tau_hat=1.3)
+            i = i+1
+        print("dim = ",d," : ", boo)
+
+    print("\n For different value of N")
+    for n in [15, 55, 91]:
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = strang_splittingLinearity(2, n, tau_hat=1.3)
+            i = i+1
+        print("N = ",n," : ", boo)
 
 
 # On Strang-Splitting integrator 
 
-def testUnitarity(dim, N):
-    i=0
-    boo = True
-    while i < 50 and boo == True:
-        boo = unitarityTest(dim, N)
-        i = i+1
-    print("unitarityTest :")
-    print(i)
-    print(boo)
+def testUnitarity():
+    print("---unitarityTest--- \n")
+
+    print("For different number of dimension :")
+    for d in range(1,5):
+        i=0
+        boo = True
+        while i < 50 and boo == True:
+            boo = unitarityTest(d, 5, tau_hat=1.3)
+            i = i+1
+        print("dim = ",d," : ", boo)  
+
+    print("For different value of N")
+    for n in [15, 55, 91]:
+        i = 0 
+        boo = True
+        while i < 50 and boo == True:
+            boo = unitarityTest(2, n, tau_hat)
+            i = i+1
+        print("N = ",n," : ", boo) 
 
 
 
@@ -243,46 +338,70 @@ def testUnitarity(dim, N):
 
 # On eigenvalue
 
-def testEigenvalue(dim, N):
-    i=0
-    print("eigenvalueTest :")
-    while i < 10:
-        print(eigenvalueTest(dim, N))
-        i = i+1
+def testEigenvalue():
+    print("---eigenvalueTest--- \n")
+
+    print("For different number of dimension :")
+    for d in range(1,5):
+        print("dim = ", d, " :")
+        i=0
+        while i < 10:
+            print(eigenvalueTest(d, 5))
+            i = i+1
+    
+    print("\n")
+
+    print("For different value of N")
+    for n in [15, 55, 91]:
+        print("N = ",n," : ") 
+        i = 0 
+        while i < 10:
+            print(eigenvalueTest(2, n))
+            i = i+1
 
 
 # On Second order & Strang-Splitting integrators
 
+def testIntegrators():
+    print("---integratorsTest--- \n")    
 
-def testIntegrators(dim, N, tau_hat):
+    print("For different number of dimension :")
+    for d in range(1,5):
+        print("dim = ",d," : ")
 
-    psi = ndim_Random(dim, N)
-    i = 0
-    print("integratorsTest : ")
-    while i < 50:
-        tau_hat = tau_hat/10
+        tau_hat = 1
+        for n in range(3):
+            print("tau_hat = ", tau_hat, " :")
+            print("---> Divergence : ")
+            psi = ndim_Random(d, 5)
+            rightSide, leftSide = psi
 
-        rightSide = second_order_integrator(psi, tau_hat)
+            for m in range(0,1,tau_hat):
+                rightSide = second_order_integrator(rightSide, tau_hat)
+                leftSide = strang_splitting_integrator(leftSide, tau_hat)
+                
+            
+            divergence = np.abs(leftSide - rightSide)
+            div_max = np.linalg.norm(divergence)        
 
-        leftSide = strang_splitting_integrator(psi, tau_hat)
-
-        divergence = np.abs(leftSide - rightSide)
-
-        div_max = np.linalg.norm(divergence)
-
-        i = i + 1
-
-        print(div_max)
+            print("-----------> ", div_max)
     tau_hat = 1
 
 
 
 #################### Tests call ####################
 
-test1 = testLinearity(dim, N)
-test2 = testHermiticity(dim, N)
-test3 = testPositivity(dim, N)
-test4 = testEigenvalue(dim, N)
-test5 = testUnitarity(dim, N)
-test6 = testIntegrators(dim, N, tau_hat)
-test7 = testLinearityIntegrators(dim, N, tau_hat)
+print("\n ################################ \n")
+test1 = testLinearity()
+print("\n ################################ \n")
+test2 = testHermiticity()
+print("\n ################################ \n")
+test3 = testPositivity()
+print("\n ################################ \n")
+test4 = testEigenvalue()
+print("\n ################################ \n")
+test5 = testUnitarity()
+print("\n ################################ \n")
+test6 = testLinearityIntegrators()
+print("\n ################################ \n")
+test7 = testIntegrators()
