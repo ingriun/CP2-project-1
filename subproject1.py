@@ -45,9 +45,9 @@ def ndim_Random(dim, N):
 def laplacian(psi):
     # Boundary conditions inherent to np.roll
     psi_2nd = np.zeros_like(psi)
-
+    
     for axis in range(psi.ndim):
-        psi_2nd += np.roll(psi, -1, axis=axis) - 2 * psi + np.roll(psi, 1, axis=axis)
+        psi_2nd += np.roll(psi, -1, axis=axis) - 2*psi + np.roll(psi, 1, axis=axis) 
 
     return psi_2nd
 
