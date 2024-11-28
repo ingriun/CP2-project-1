@@ -44,9 +44,12 @@ def ndim_Random(dim, N):
 
 def laplacian(psi):
     # Boundary conditions inherent to np.roll
-    psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) 
-    return psi_2nd
+    psi_2nd = np.zeros_like(psi)
 
+    for axis in range(psi.ndim):
+        psi_2nd += np.roll(psi, -1) - 2 * psi + np.roll(psi, 1)
+        
+    return psi_2nd
 
 def kineticEnergy(psi):
     array = np.ones(psi.shape)
