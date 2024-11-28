@@ -47,8 +47,8 @@ def laplacian(psi):
     psi_2nd = np.zeros_like(psi)
 
     for axis in range(psi.ndim):
-        psi_2nd += np.roll(psi, -1) - 2 * psi + np.roll(psi, 1)
-        
+        psi_2nd += np.roll(psi, -1, axis=axis) - 2 * psi + np.roll(psi, 1, axis=axis)
+
     return psi_2nd
 
 def kineticEnergy(psi):
