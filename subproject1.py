@@ -44,6 +44,8 @@ def ndim_Random(dim, N):
 
 def laplacian(psi):
     # Boundary conditions inherent to np.roll
+    print(psi)
+    print(np.roll(psi, -1))
     psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) 
     return psi_2nd
 
