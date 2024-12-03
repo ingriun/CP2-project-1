@@ -77,20 +77,6 @@ def positivityTest(dim, N):
 
 
 
-def noPotentialHamiltonian(psi):
-    """ hamiltonian without potential part,
-        only used in eigenvalueTest"""
-
-    psi_2nd = laplacian(psi) 
-
-    k_hat = kineticEnergy(psi)
-
-    h_hat = k_hat*psi_2nd 
-    
-    return h_hat
-
-
-
 def eigenvalueTest(dim, N):
     """
     Test if H.psi = E.psi 
@@ -111,11 +97,11 @@ def eigenvalueTest(dim, N):
         psi[index] = np.exp(2 * np.pi * 1j * np.vdot(index,k) / N)
 
 
-    eigenvalue = (2/(mu*epsilon**2)) * (np.sin(np.pi * k/N))**2
+    eigenvalue = np.sum((2/(mu*epsilon**2)) * (np.sin(np.pi * k/N))**2)
 
-    rightSide = np.sum(eigenvalue) * psi
+    rightSide = eigenvalue*psi
 
-    leftSide = noPotentialHamiltonian(psi)
+    leftSide = kineticEnergy(psi)
 
     difference = leftSide - rightSide
 
@@ -338,13 +324,13 @@ def testEigenvalue():
         print("dim = ", d, " :")
         i=0
         while i < 10:
-            print(eigenvalueTest(d, 5))
+            print(eigenvalueTest(d, N))
             i = i+1
     
     print("\n")
 
     print("For different value of N")
-    for n in [15, 55, 91]:
+    for n in [100]:
         print("N = ",n," : ") 
         i = 0 
         while i < 10:
@@ -362,7 +348,7 @@ def testIntegrators():
         print("dim = ",d," : ")
 
         tau_hat = 0.1
-        for n in range(4):
+        for n in range(3):
             tau_hat = tau_hat/10
             print("tau_hat = ", tau_hat, " :")
             print("---> Divergence : ")
