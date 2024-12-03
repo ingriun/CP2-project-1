@@ -48,11 +48,11 @@ def power_method(Q, tol=1e-6, max_iter=10000):
     return eigenvalue, w
 
 #defire Hamiltonian as the function for the operator
-def apply_hamiltonian(psi):
-    return hamiltonian(psi)
+#def apply_hamiltonian(psi):
+    #return hamiltonian(psi)
 
 #run the power method
-largest_eigenvalue, eigenvector = power_method(apply_hamiltonian)
+largest_eigenvalue, eigenvector = power_method(hamiltonian)
 
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)

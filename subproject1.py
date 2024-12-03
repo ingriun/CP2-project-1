@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 N = 101
 epsilon = 0.03*101 / N
 mu = 1
-dim = 1
+dim = 2
 tau_hat = 0.1
 ##################################
 
@@ -34,7 +34,7 @@ def ndim_Random(dim, N):
     tuplet = tuple(list)
     
     # Create lattice array w/ complex numbers
-    array = np.random.random(*tuplet).astype(complex)
+    array = np.random.random(tuplet).astype(complex)
     return array
 
 
@@ -44,9 +44,12 @@ def ndim_Random(dim, N):
 
 def laplacian(psi):
     # Boundary conditions inherent to np.roll
-    psi_2nd = np.roll(psi, -1) - 2*psi + np.roll(psi, 1) 
-    return psi_2nd
+    psi_2nd = np.zeros_like(psi)
+    
+    for axis in range(psi.ndim):
+        psi_2nd += np.roll(psi, -1, axis=axis) - 2*psi + np.roll(psi, 1, axis=axis) 
 
+    return psi_2nd
 
 def kineticEnergy(psi):
     array = np.ones(psi.shape)
@@ -54,19 +57,18 @@ def kineticEnergy(psi):
     return k_hat
 
 
-def potential(psi):
-
-    ones = np.ones(psi.shape)
-    
+def potential(psi):    
     N = psi.shape[0]
 
     # Potential centered in 0 to obtain the double-well property
-    coordinates_centered = np.linspace(N//2, -N//2 + 1, N)
+    coordinates_centered = [np.linspace(-N//2+1, N//2 , N) for dim in psi.shape]
 
-    v_hat = coordinates_centered * ones
-
-    for index in np.ndindex(psi.shape):
-        v_hat[index] = mu/8*((epsilon**2 * v_hat[index]**2 - 1)**2)
+    grids = np.meshgrid(*coordinates_centered, indexing="ij")
+    
+    # Compute radial distance from the center
+    r = np.sqrt(sum(g**2 for g in grids))
+    
+    v_hat = mu / 8 * ((epsilon**2 * r**2 - 1)**2)
 
     return v_hat
 
@@ -108,8 +110,8 @@ def strang_splitting_integrator(psi, tau_hat):
 
 
     # Define the Fourier space wave numbers
-    k = np.fft.fftfreq(N, d=epsilon) * 2 * np.pi  # FFT frequencies, scaled by 2π
-    k_mesh = np.meshgrid(*([k] * dim), indexing='ij')  # Create a meshgrid for each dimension
+    k = np.fft.fftfreq(psi.shape[0], d=epsilon) * 2 * np.pi  # FFT frequencies, scaled by 2π
+    k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
     k_eigenvalues = sum((2 / (mu * epsilon**2)) * np.sin(k_dim / 2)**2 for k_dim in k_mesh)
