@@ -3,6 +3,7 @@ from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 
 
 def conjugateGradient(mat, tol, max_iter):
+    b = 1
     x = 0*ndim_Ones(mat.ndim, mat.shape[0])
     r_new = ndim_Ones(mat.ndim, mat.shape[0]) * b - mat*x
     r_old = r_new
