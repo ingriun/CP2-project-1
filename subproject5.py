@@ -3,7 +3,7 @@ import matplotlib.animation as animation
 import numpy as np
 import random
 from subproject2 import ndim_Random
-from subproject1 import strang_splitting_integrator, tau_hat, ndim_Ones, potential
+from subproject1 import strang_splitting_integrator, ndim_Ones, potential
 from subproject1 import N, mu, epsilon, tau_hat, dim
 
 def initialWavepacket(dim, N):
@@ -13,13 +13,20 @@ def initialWavepacket(dim, N):
     wavelength = 20
     L = N
     print('wl: ', wavelength)
-    k = 2*np.pi / wavelength
-    A = 1 / np.sqrt(2 * L)
-    B = A
+    #k = 2*np.pi / wavelength
+    #A = 1 / np.sqrt(2 * L)
+    #B = A
     c = 3 * 10**8
     for index in np.ndindex(psi.shape):
-        psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
+        #psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
+        psi[index]=np.exp(-(x_positions[index]-c*tau_hat)**2)*(np.cos(2*np.pi*(x_positions[index]-c*tau_hat)/wavelength) + 1j*np.sin(2*np.pi*(x_positions[index]-c*tau_hat)/wavelength))
 
+
+    plt.plot(x_positions, np.abs(psi.flatten()))
+    plt.title("Initial Wave Packet")
+    plt.xlabel("Position")
+    plt.ylabel("|ψ|")
+    plt.show()
     return x_positions, psi
 
 
@@ -39,7 +46,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     
     # The plot will show the magnitude of psi at each step
     line, = ax.plot(x_positions, (psi.flatten()), 'lightgrey', label="Initial Ψ")
-    ax.set_ylim(-5, 5)
+    ax.set_ylim(0, 1.5 * np.max(np.abs(psi)))
     ax.set_xlim(0,100)
     ax.set_title("Time Evolution of the Wave Function")
     ax.set_xlabel("Position")
@@ -54,12 +61,12 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
         # Apply the integrator to evolve the wave function
         nonlocal psi
         psi = integrator(psi, tau_hat)
-        
+        print(f"Frame {frame}: psi = {psi}")
         # Flatten psi 
         psi_flat = (psi.flatten())
         
         # Update the plot 
-        line.set_ydata(psi_flat)  # Plot the magnitude of psi
+        line.set_ydata(np.abs(psi_flat))  # Plot the magnitude of psi
         line.set_color('g')
         return line,
 

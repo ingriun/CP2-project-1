@@ -126,4 +126,4 @@ def animate_wave_function_tunneling(dim, N, num_frames=100, integrator=strang_sp
     plt.show()
 
 # Example usage:
-animate_wave_function_tunneling(dim=1, N=201, num_frames=1000, integrator=strang_splitting_integrator)
+animate_wave_function_tunneling(dim=1, N=101, num_frames=1000, integrator=strang_splitting_integrator)

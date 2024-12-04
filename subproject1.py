@@ -4,10 +4,10 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 3
+N = 101
 epsilon = 0.03*101 / N
 mu = 1
-dim = 1
+dim = 2
 tau_hat = 0.1
 ##################################
 
@@ -47,13 +47,15 @@ def laplacian(psi):
     psi_2nd = np.zeros_like(psi)
     
     for axis in range(psi.ndim):
-        psi_2nd += np.roll(psi, -1, axis=axis) - 2 * psi + np.roll(psi, 1, axis=axis) 
+        psi_2nd += np.roll(psi, -1, axis=axis) - 2*psi + np.roll(psi, 1, axis=axis) 
 
     return psi_2nd
 
 def kineticEnergy(psi):
-    k_hat = (-1/(2*mu*epsilon**2))*(laplacian(psi))
+    array = np.ones(psi.shape)
+    k_hat = -1/(2*mu*epsilon**2)*array
     return k_hat
+
 
 def potential(psi):    
     N = psi.shape[0]
@@ -73,11 +75,13 @@ def potential(psi):
 
 def hamiltonian(psi):
 
+    psi_2nd = laplacian(psi)    
+
     v_hat = potential(psi)
 
     k_hat = kineticEnergy(psi)
 
-    h_hat = k_hat + v_hat * psi
+    h_hat = k_hat*psi_2nd + v_hat * psi
     
     return h_hat
 
