@@ -61,7 +61,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
         # Apply the integrator to evolve the wave function
         nonlocal psi
         psi = integrator(psi, tau_hat)
-        
+        print(f"Frame {frame}: psi = {psi}")
         # Flatten psi 
         psi_flat = (psi.flatten())
         
