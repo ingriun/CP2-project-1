@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import random
-from subproject2 import ndim_Random
+#from subproject2 import ndim_Random
 from subproject1 import strang_splitting_integrator, ndim_Ones, potential
 from subproject1 import N, mu, epsilon, tau_hat, dim
 
@@ -19,8 +19,8 @@ def initialWavepacket(dim, N):
     c = 3 * 10**8
     for index in np.ndindex(psi.shape):
         #psi[index] = A * np.exp(1j * k * (x_positions[index])) + B * np.exp(1j * k * (x_positions[index]))
-        psi[index]=np.exp(-(x_positions[index]-c*tau_hat)**2)*(np.cos(2*np.pi*(x_positions[index]-c*tau_hat)/wavelength) + 1j*np.sin(2*np.pi*(x_positions[index]-c*tau_hat)/wavelength))
-
+        #psi[index]=np.exp(-(x_positions[index]-c*tau_hat)**2)*(np.cos(2*np.pi*(x_positions[index]-c*tau_hat)/wavelength) + 1j*np.sin(2*np.pi*(x_positions[index]-c*tau_hat)/wavelength))
+        psi[index]=np.exp(-(x_positions[index]-50)**2/(2*20**2))
 
     plt.plot(x_positions, np.abs(psi.flatten()))
     plt.title("Initial Wave Packet")
@@ -46,6 +46,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     
     # The plot will show the magnitude of psi at each step
     line, = ax.plot(x_positions, (psi.flatten()), 'lightgrey', label="Initial Ψ")
+    ax.plot(x_positions, potential(psi))
     ax.set_ylim(0, 1.5 * np.max(np.abs(psi)))
     ax.set_xlim(0,100)
     ax.set_title("Time Evolution of the Wave Function")
@@ -77,6 +78,6 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
 
 
 # Example usage:
-animate_wave_function(dim, N, num_frames=1000, integrator=strang_splitting_integrator)
+animate_wave_function(dim = 1, N = N, num_frames=1000, integrator=strang_splitting_integrator)
 
 
