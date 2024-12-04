@@ -66,7 +66,7 @@ def potential(psi):
     grids = np.meshgrid(*coordinates_centered, indexing="ij")
     
     # Compute radial distance from the center
-    r = np.sqrt(sum(g**2 for g in grids))
+    r = np.sqrt(np.sum(g**2 for g in grids))
     
     v_hat = mu / 8 * ((epsilon**2 * r**2 - 1)**2)
 
