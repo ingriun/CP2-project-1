@@ -333,52 +333,66 @@ def testUnitarity():
 def testEigenvalue():
     print("---eigenvalueTest--- \n")
 
-    print("For different number of dimension :")
+    print("For different number of dimension :\n")
     for d in range(1,5):
         print("dim = ", d, " :")
         i=0
         while i < 10:
             print(eigenvalueTest(d, 5))
             i = i+1
+        print("\n")
     
     print("\n")
 
-    print("For different value of N")
+    print("For different value of N : \n")
     for n in [15, 55, 91]:
         print("N = ",n," : ") 
         i = 0 
         while i < 10:
             print(eigenvalueTest(2, n))
             i = i+1
-
+        print("\n")
 
 # On Second order & Strang-Splitting integrators
+
+def integDiv(psi,tau_hat):
+    for i in range(4):
+        print("tau_hat = ", tau_hat, " :")
+        print("---> Divergence : ")
+
+        rightSide = psi
+        leftSide = psi
+
+        for m in np.arange(0,1,tau_hat):
+            rightSide = second_order_integrator(rightSide, tau_hat)
+            leftSide = strang_splitting_integrator(leftSide, tau_hat)
+                          
+        divergence = np.abs(leftSide - rightSide)
+        div_max = np.max(divergence)        
+
+        print("-----------> ", div_max)
+        tau_hat = tau_hat/10
+    print("\n")
+
 
 def testIntegrators():
     print("---integratorsTest--- \n")    
 
-    print("For different number of dimension :")
+    print("For different number of dimension : \n")
     for d in range(1,5):
         print("dim = ",d," : ")
 
-        tau_hat = 0.1
-        for n in range(4):
-            tau_hat = tau_hat/10
-            print("tau_hat = ", tau_hat, " :")
-            print("---> Divergence : ")
-            psi = ndim_Random(d, 5)
-            rightSide = psi
-            leftSide = psi
+        psi = ndim_Random(d, 5)
+        integDiv(psi, tau_hat=1)
 
-            for m in np.arange(0,1,tau_hat):
-                rightSide = second_order_integrator(rightSide, tau_hat)
-                leftSide = strang_splitting_integrator(leftSide, tau_hat)
-                          
-            divergence = np.abs(leftSide - rightSide)
-            div_max = np.linalg.norm(divergence)        
 
-            print("-----------> ", div_max)
-    tau_hat = 1
+    print("For different value of N \n")
+    for n in [15, 55, 91]:
+        print("N = ",n," : ") 
+
+        psi = ndim_Random(1, n)
+        integDiv(psi, tau_hat=1)
+
 
 
 
