@@ -8,7 +8,7 @@ N = 101
 epsilon = 0.03*101 / N
 mu = 1
 dim = 2
-tau_hat = 0.1
+tau_hat = 0.0001
 ##################################
 
 ############### Initialize the lattice as array ###################
