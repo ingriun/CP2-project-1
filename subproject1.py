@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 N = 101
 epsilon = 0.03*101 / N
 mu = 1
-dim = 2
-tau_hat = 0.1
+dim = 1
+tau_hat = 0.0001
 ##################################
 
 ############### Initialize the lattice as array ###################
@@ -47,15 +47,13 @@ def laplacian(psi):
     psi_2nd = np.zeros_like(psi)
     
     for axis in range(psi.ndim):
-        psi_2nd += np.roll(psi, -1, axis=axis) - 2*psi + np.roll(psi, 1, axis=axis) 
+        psi_2nd += np.roll(psi, -1, axis=axis) - 2 * psi + np.roll(psi, 1, axis=axis) 
 
     return psi_2nd
 
 def kineticEnergy(psi):
-    array = np.ones(psi.shape)
-    k_hat = -1/(2*mu*epsilon**2)*array
+    k_hat = (-1/(2*mu*epsilon**2))*(laplacian(psi))
     return k_hat
-
 
 def potential(psi):    
     N = psi.shape[0]
@@ -75,13 +73,11 @@ def potential(psi):
 
 def hamiltonian(psi):
 
-    psi_2nd = laplacian(psi)    
-
     v_hat = potential(psi)
 
     k_hat = kineticEnergy(psi)
 
-    h_hat = k_hat*psi_2nd + v_hat * psi
+    h_hat = k_hat + v_hat * psi
     
     return h_hat
 
@@ -100,6 +96,7 @@ def second_order_integrator(psi, tau_hat):
 
 def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
+    
     v_half = np.exp(-1j * (tau_hat / 2) * potential(psi)) 
     
     # Apply potential
@@ -110,7 +107,8 @@ def strang_splitting_integrator(psi, tau_hat):
 
 
     # Define the Fourier space wave numbers
-    k = np.fft.fftfreq(psi.shape[0], d=epsilon) * 2 * np.pi  # FFT frequencies, scaled by 2π
+    k = np.fft.fftfreq(psi.shape[0], d=epsilon)   # FFT frequencies, scaled by 2π
+    print(k)
     k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
