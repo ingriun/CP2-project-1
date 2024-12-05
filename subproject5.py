@@ -73,7 +73,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
         return line,
 
     # Create the animation
-    ani = animation.FuncAnimation(fig, update_frame, frames=times, interval=500, blit=True)
+    ani = animation.FuncAnimation(fig, update_frame, frames=times, interval=100, blit=True)
     
     plt.show()
 

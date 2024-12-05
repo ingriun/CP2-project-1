@@ -4,7 +4,7 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 10
+N = 101
 epsilon = 0.03*101 / N
 mu = 1
 dim = 2
@@ -66,7 +66,7 @@ def potential(psi):
     grids = np.meshgrid(*coordinates_centered, indexing="ij")
     
     # Compute radial distance from the center
-    r = np.sqrt(np.sum(g**2 for g in grids))
+    r = np.sqrt(sum(g**2 for g in grids))
     
     v_hat = mu / 8 * ((epsilon**2 * r**2 - 1)**2)
 
@@ -108,9 +108,10 @@ def strang_splitting_integrator(psi, tau_hat):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-
+    print(psi.shape)
     # Define the Fourier space wave numbers
-    k = np.fft.fftfreq(psi.shape[0], d=epsilon) * 2 * np.pi  # FFT frequencies, scaled by 2π
+    k = np.fft.fftfreq(psi.shape[0], d=1) * 2 * np.pi  # FFT frequencies, scaled by 2π
+    print(k)
     k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
@@ -126,3 +127,5 @@ def strang_splitting_integrator(psi, tau_hat):
     xi = np.fft.ifftn(k_exp * eta_tilde) #transform back to position space
 
     return v_half * xi
+
+strang_splitting_integrator(ndim_Random(dim, 5), tau_hat)
