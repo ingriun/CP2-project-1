@@ -1,5 +1,29 @@
 import numpy as np
-from subproject1 import hamiltonian, ndim_Random, dim, N
+from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
+
+
+def conjugateGradient(mat, tol, max_iter):
+    b = 1
+    x = 0*ndim_Ones(mat.ndim, mat.shape[0])
+    r_new = ndim_Ones(mat.ndim, mat.shape[0]) * b - mat*x
+    r_old = r_new
+    p = r_new
+
+    k=0
+    while k < max_iter:
+        alpha = (np.vdot(np.transpose(r_new),r_new))/(np.vdot(np.transpose(p),mat*p))
+        x = x + alpha*p
+        r_new = r_new - alpha*p
+
+        if r_new < tol:
+            mat_inv = x
+            break
+
+        beta = (np.vdot(np.transpose(r_new),r_new))/(np.vdot(np.transpose(r_old),r_old))
+        p = r_new + beta*p
+        r_old = r_new
+        k = k+1
+    return mat_inv
 
 def power_method(Q, tol=1e-6, max_iter=10000):
     """define the power method to compute the largest eigenvalue and corresponding eigenvector of an operator Q
