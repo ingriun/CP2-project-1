@@ -4,11 +4,11 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 101
-epsilon = 0.03*101 / N
-mu = 1
-dim = 1
-tau_hat = 0.0001
+N = 201
+epsilon = 0.03
+mu = 100
+dim = 2
+tau_hat = 0.01
 ##################################
 
 ############### Initialize the lattice as array ###################

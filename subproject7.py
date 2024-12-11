@@ -26,7 +26,11 @@ def conjugateGradient(mat, tol, max_iter):
         k = k+1
     return mat_inv
 
-def power_method(Q, tol=1e-6, max_iter=10000):
+def hinv(v, tol=1e-6, max_iter=100000):
+    v=ndim_Random(dim, N)
+    return 
+
+def power_method(Q, tol=1e-6, max_iter=100000):
     """define the power method to compute the largest eigenvalue and corresponding eigenvector of an operator Q
 
     Parameters:
@@ -59,7 +63,7 @@ def power_method(Q, tol=1e-6, max_iter=10000):
         w = w/np.linalg.norm(w)
 
         #approximate the largest eigenvalue
-        eigenvalue_new = np.vdot(w, Q(w)).real #using Hermiticity of Q
+        eigenvalue_new = np.vdot(w, Q(w)).real 
 
         #check for convergence
         if eigenvalue is not None and np.abs(eigenvalue_new - eigenvalue) < tol:
@@ -69,12 +73,19 @@ def power_method(Q, tol=1e-6, max_iter=10000):
         eigenvalue = eigenvalue_new
         v=w #update w for next iteration
 
-    print("Maximum iteration reached without convergence.")
-    return eigenvalue, w
+ # If maximum iterations are reached without convergence, raise an error
+    raise RuntimeError(f"Power method failed to converge within {max_iter} iterations.")
 
-#defire Hamiltonian as the function for the operator
-#def apply_hamiltonian(psi):
-    #return hamiltonian(psi)
+#apply cg to the hamiltonian
+"""tol = 1e-6
+max_iter = 100000
+cg_result = conjugateGradient(hamiltonian, tol, max_iter)
+
+#use cg result as Q in power method
+def apply_cg_result(v):
+    return np.dot(cg_result, v) """
+
+inverse_hamiltonian = conjugateGradient(hamiltonian, tol=1e-6, max_iter=100000)
 
 def gram_schmidt(V):
     """Define the gram-schmidt process to orthonormalise the eigenvectors
@@ -105,9 +116,26 @@ def arnoldi_method():
     return
 
 #run the power method
-largest_eigenvalue, eigenvector = power_method(hamiltonian)
+largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
 
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)
 
+#calculate the smallest eigenvalue of the inverse of the result
+#inverse_matrix = np.linalg.inv(cg_result)
+"""smallest_eigenvalue = 1/largest_eigenvalue
 
+print("Smallest eigenvalue:", smallest_eigenvalue)"""
+
+
+"""A = np.diag([1, 2, 3, 4, 5])
+
+def apply_matrix(v):
+    return np.dot(A, v)
+
+computed_eigenvalue, vector = power_method(apply_matrix) 
+
+# Compare with true eigenvalues
+true_eigenvalues = np.linalg.eigvals(A)
+print("Computed eigenvalues:", computed_eigenvalue)
+print("True eigenvalues:", true_eigenvalues)"""
