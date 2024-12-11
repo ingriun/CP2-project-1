@@ -55,11 +55,11 @@ def kineticEnergy(psi):
     k_hat = (-1/(2*mu*epsilon**2))*(laplacian(psi))
     return k_hat
 
-def potential(psi):    
-    N = psi.shape[0]
+def potential(shape):    
+    N = shape[0]
 
     # Potential centered in 0 to obtain the double-well property
-    coordinates_centered = [np.linspace(-N//2+1, N//2 , N) for dim in psi.shape]
+    coordinates_centered = [np.linspace(-N//2+1, N//2 , N) for dim in shape]
 
     grids = np.meshgrid(*coordinates_centered, indexing="ij")
     
@@ -73,7 +73,7 @@ def potential(psi):
 
 def hamiltonian(psi):
 
-    v_hat = potential(psi)
+    v_hat = potential(psi.shape)
 
     k_hat = kineticEnergy(psi)
 
@@ -97,7 +97,7 @@ def second_order_integrator(psi, tau_hat):
 def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
     
-    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi)) 
+    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi.shape)) 
     
     # Apply potential
     eta = v_half * psi
