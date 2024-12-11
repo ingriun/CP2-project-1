@@ -87,6 +87,29 @@ def apply_cg_result(v):
 
 inverse_hamiltonian = conjugateGradient(hamiltonian, tol=1e-6, max_iter=100000)
 
+def gram_schmidt(V):
+    """Define the gram-schmidt process to orthonormalise the eigenvectors
+
+    Parameters:
+    V: ndarray
+        Consisting of column vectors that needs to be orthonormalised.
+
+    Returns:
+    U: ndarray
+        Orthonormalised column vectors    
+    """
+    n, k = V.shape()
+    U = np.zeros(n, k)
+    U[:, 0] = V[:, 0]/np.linalg.norm(V[:, 0])
+
+    for i in range(1, k):
+        U[:, i] = V[:, i]
+        for j in range(i):
+            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i])*U[:, j]
+        U[:, i] = V[:, i]/np.linalg.norm(V[:, i])
+
+    return U
+
 #run the power method
 largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
 
