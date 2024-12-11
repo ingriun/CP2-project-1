@@ -93,11 +93,16 @@ def gram_schmidt(V):
 
     for i in range(1, k):
         U[:, i] = V[:, i]
+
         for j in range(i):
-            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i])*U[:, j]
+            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i]) * U[:, j]
+
         U[:, i] = V[:, i]/np.linalg.norm(V[:, i])
 
     return U
+
+def arnoldi_method():
+    return
 
 #run the power method
 largest_eigenvalue, eigenvector = power_method(hamiltonian)

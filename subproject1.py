@@ -96,8 +96,8 @@ def second_order_integrator(psi, tau_hat):
 
 def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
-    
-    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi)) 
+    pot = potential(psi)
+    v_half = np.exp(-1j * (tau_hat / 2) * pot)
     
     # Apply potential
     eta = v_half * psi
@@ -105,10 +105,10 @@ def strang_splitting_integrator(psi, tau_hat):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-    print(psi.shape)
+    #print(psi.shape)
     # Define the Fourier space wave numbers
     k = np.fft.fftfreq(psi.shape[0], d=1) * 2 * np.pi  # FFT frequencies, scaled by 2π
-    print(k)
+    #print(k)
     k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
