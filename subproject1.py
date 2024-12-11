@@ -4,15 +4,11 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 101
-epsilon = 0.03*101 / N
-mu = 1
-<<<<<<< HEAD
-dim = 1
-=======
+N = 201
+epsilon = 0.03
+mu = 100
 dim = 2
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
-tau_hat = 0.0001
+tau_hat = 0.01
 ##################################
 
 ############### Initialize the lattice as array ###################
@@ -111,11 +107,7 @@ def strang_splitting_integrator(psi, tau_hat):
 
     print(psi.shape)
     # Define the Fourier space wave numbers
-<<<<<<< HEAD
-    k = np.fft.fftfreq(psi.shape[0], d=epsilon)   # FFT frequencies, scaled by 2π
-=======
     k = np.fft.fftfreq(psi.shape[0], d=1) * 2 * np.pi  # FFT frequencies, scaled by 2π
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
     print(k)
     k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 

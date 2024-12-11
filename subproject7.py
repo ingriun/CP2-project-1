@@ -5,42 +5,32 @@ from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 def conjugateGradient(mat, tol, max_iter):
     b = 1
     x = 0*ndim_Ones(mat.ndim, mat.shape[0])
-<<<<<<< HEAD
-    r_new = ndim_Ones(mat.ndim, mat.shape[0]) * b - mat*x
-=======
     r_new = ndim_Ones(mat.ndim, mat.shape[0]) * b - np.dot(mat,x)
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
     r_old = r_new
     p = r_new
 
     k=0
     while k < max_iter:
-<<<<<<< HEAD
-        alpha = (np.vdot(np.transpose(r_new),r_new))/(np.vdot(np.transpose(p),mat*p))
-        x = x + alpha*p
-        r_new = r_new - alpha*p
-=======
         mat_p = np.dot(mat,p)
         alpha = (np.dot(np.transpose(r_new),r_new))/(np.dot(np.transpose(p),mat_p))
         x = x + np.dot(alpha,p)
         r_new = r_new - np.dot(alpha,mat_p)
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
 
         if r_new < tol:
             mat_inv = x
             break
 
-<<<<<<< HEAD
-        beta = (np.vdot(np.transpose(r_new),r_new))/(np.vdot(np.transpose(r_old),r_old))
-=======
         beta = (np.dot(np.transpose(r_new),r_new))/(np.dot(np.transpose(r_old),r_old))
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
         p = r_new + beta*p
         r_old = r_new
         k = k+1
     return mat_inv
 
-def power_method(Q, tol=1e-6, max_iter=10000):
+def hinv(v, tol=1e-6, max_iter=100000):
+    v=ndim_Random(dim, N)
+    return 
+
+def power_method(Q, tol=1e-6, max_iter=100000):
     """define the power method to compute the largest eigenvalue and corresponding eigenvector of an operator Q
 
     Parameters:
@@ -73,7 +63,7 @@ def power_method(Q, tol=1e-6, max_iter=10000):
         w = w/np.linalg.norm(w)
 
         #approximate the largest eigenvalue
-        eigenvalue_new = np.vdot(w, Q(w)).real #using Hermiticity of Q
+        eigenvalue_new = np.vdot(w, Q(w)).real 
 
         #check for convergence
         if eigenvalue is not None and np.abs(eigenvalue_new - eigenvalue) < tol:
@@ -83,17 +73,41 @@ def power_method(Q, tol=1e-6, max_iter=10000):
         eigenvalue = eigenvalue_new
         v=w #update w for next iteration
 
-    print("Maximum iteration reached without convergence.")
-    return eigenvalue, w
+ # If maximum iterations are reached without convergence, raise an error
+    raise RuntimeError(f"Power method failed to converge within {max_iter} iterations.")
 
-#defire Hamiltonian as the function for the operator
-#def apply_hamiltonian(psi):
-    #return hamiltonian(psi)
+#apply cg to the hamiltonian
+"""tol = 1e-6
+max_iter = 100000
+cg_result = conjugateGradient(hamiltonian, tol, max_iter)
+
+#use cg result as Q in power method
+def apply_cg_result(v):
+    return np.dot(cg_result, v) """
+
+inverse_hamiltonian = conjugateGradient(hamiltonian, tol=1e-6, max_iter=100000)
 
 #run the power method
-largest_eigenvalue, eigenvector = power_method(hamiltonian)
+largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
 
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)
 
+#calculate the smallest eigenvalue of the inverse of the result
+#inverse_matrix = np.linalg.inv(cg_result)
+"""smallest_eigenvalue = 1/largest_eigenvalue
 
+print("Smallest eigenvalue:", smallest_eigenvalue)"""
+
+
+"""A = np.diag([1, 2, 3, 4, 5])
+
+def apply_matrix(v):
+    return np.dot(A, v)
+
+computed_eigenvalue, vector = power_method(apply_matrix) 
+
+# Compare with true eigenvalues
+true_eigenvalues = np.linalg.eigvals(A)
+print("Computed eigenvalues:", computed_eigenvalue)
+print("True eigenvalues:", true_eigenvalues)"""

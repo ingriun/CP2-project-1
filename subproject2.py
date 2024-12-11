@@ -330,13 +330,8 @@ def testEigenvalue():
     
     print("\n")
 
-<<<<<<< HEAD
-    print("For different value of N")
-    for n in [100]:
-=======
     print("For different value of N : \n")
     for n in [15, 55, 91]:
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
         print("N = ",n," : ") 
         i = 0 
         while i < 10:
@@ -373,19 +368,8 @@ def testIntegrators():
     for d in range(1,5):
         print("dim = ",d," : ")
 
-<<<<<<< HEAD
-        tau_hat = 0.1
-        for n in range(3):
-            tau_hat = tau_hat/10
-            print("tau_hat = ", tau_hat, " :")
-            print("---> Divergence : ")
-            psi = ndim_Random(d, 5)
-            rightSide = psi
-            leftSide = psi
-=======
         psi = ndim_Random(d, 5)
         integDiv(psi, tau_hat=1)
->>>>>>> 991db796024f344ee972bbb729e6c7c7b79328cf
 
 
     print("For different value of N \n")
