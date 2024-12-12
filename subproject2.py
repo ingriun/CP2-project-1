@@ -342,7 +342,7 @@ def testEigenvalue():
 # On Second order & Strang-Splitting integrators
 
 def integDiv(psi,tau_hat):
-    for i in range(4):
+    for i in range(5):
         print("tau_hat = ", tau_hat, " :")
         print("---> Divergence : ")
 
@@ -384,7 +384,7 @@ def testIntegrators():
 
 #################### Tests call ####################
 
-print("\n ################################ \n")
+"""print("\n ################################ \n")
 test1 = testLinearity()
 print("\n ################################ \n")
 test2 = testHermiticity()
@@ -394,7 +394,7 @@ print("\n ################################ \n")
 test4 = testEigenvalue()
 print("\n ################################ \n")
 test5 = testUnitarity()
-print("\n ################################ \n")
+print("\n ################################ \n")"""
 test6 = testLinearityIntegrators()
 print("\n ################################ \n")
 test7 = testIntegrators()

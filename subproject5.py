@@ -34,7 +34,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     
     # The plot will show the magnitude of psi at each step
     line, = ax.plot(x_positions, (psi.flatten()), 'lightgrey', label="Initial Ψ")
-    ax.plot(x_positions, potential(psi))
+    ax.plot(x_positions, potential(psi.shape))
     ax.set_ylim(0, 1.5 * np.max(np.abs(psi)))
     ax.set_xlim(0,500)
     ax.set_title("Time Evolution of the Wave Function")

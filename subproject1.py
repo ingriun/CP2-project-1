@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 #######initializing variables######
 N = 201
-epsilon = 0.03
-mu = 100
+epsilon = 1.1
+mu = 0.8
 dim = 2
 tau_hat = 0.01
 ##################################
@@ -105,10 +105,8 @@ def strang_splitting_integrator(psi, tau_hat):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-    print(psi.shape)
     # Define the Fourier space wave numbers
     k = np.fft.fftfreq(psi.shape[0], d=1) * 2 * np.pi  # FFT frequencies, scaled by 2π
-    print(k)
     k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
