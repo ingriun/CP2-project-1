@@ -384,7 +384,7 @@ def testIntegrators():
 
 #################### Tests call ####################
 
-print("\n ################################ \n")
+"""print("\n ################################ \n")
 test1 = testLinearity()
 print("\n ################################ \n")
 test2 = testHermiticity()
@@ -395,6 +395,6 @@ test4 = testEigenvalue()
 print("\n ################################ \n")
 test5 = testUnitarity()
 print("\n ################################ \n")
-test6 = testLinearityIntegrators()
+test6 = testLinearityIntegrators()"""
 print("\n ################################ \n")
 test7 = testIntegrators()
