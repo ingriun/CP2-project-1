@@ -4,7 +4,7 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 201
+N = 3
 epsilon = 0.8
 mu = 1.2
 dim = 2

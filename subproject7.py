@@ -2,33 +2,50 @@ import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 
 
-def conjugateGradient(mat,b, tol, max_iter):
-    x = 0*ndim_Ones(mat.ndim, mat.shape[0])
-    r_new = ndim_Ones(mat.ndim, mat.shape[0]) * b - np.dot(mat,x)
+def conjugateGradient(b, tol=1e-6, max_iter=100000):
+    """ Calculate the inverse of the hamiltonian applied to b
+
+    Parameters:
+    b: Vector
+        Solution of hamiltonian(x) = b
+    tol: float
+        Convergence tolerance for the method.
+    max_iter: int
+        Maximum number of iterations.
+
+    Returns:
+    vector (ndarray)
+        Inverse of the hamiltonian applied to b (x = hamiltonian**(-1)(b))"""
+    
+    # Initialise x with dimensions of b
+    x = 0*ndim_Ones(b.ndim, b.shape[0])
+
+    # Variables inherent to the method
+    r_new = b
     r_old = r_new
     p = r_new
 
     k=0
     while k < max_iter:
-        mat_p = np.dot(mat,p)
-        alpha = (np.dot(np.transpose(r_new),r_new))/(np.dot(np.transpose(p),mat_p))
-        x = x + np.dot(alpha,p)
-        r_new = r_new - np.dot(alpha,mat_p)
+        k = k+1
 
-        if r_new < tol:
-            break
+        A_p = hamiltonian(p)
+        alpha = np.vdot(r_new, r_new)/(np.vdot(p, A_p))
+        x = x + alpha*p
+        r_new = r_new - alpha*A_p
 
-        beta = (np.dot(np.transpose(r_new),r_new))/(np.dot(np.transpose(r_old),r_old))
+        # Check for convergence
+        if np.max(r_new) < tol:
+            print(f"converged after {k} iterations.")
+            return x
+
+        beta = np.vdot(r_new,r_new)/np.vdot(r_old,r_old)
         p = r_new + beta*p
         r_old = r_new
-        k = k+1
-    return x
 
+    # If maximum iterations are reached without convergence, raise an error
+    raise RuntimeError(f"Conjugate Gradient failed to converge within {max_iter} iterations.")
 
-
-def hinv(vec, tol=1e-6, max_iter=100000):
-    h = hamiltonian(vec)
-    return 
 
 def power_method(Q, tol=1e-6, max_iter=100000):
     """define the power method to compute the largest eigenvalue and corresponding eigenvector of an operator Q
@@ -85,7 +102,7 @@ cg_result = conjugateGradient(hamiltonian, tol, max_iter)
 def apply_cg_result(v):
     return np.dot(cg_result, v) """
 
-inverse_hamiltonian = conjugateGradient(hamiltonian, tol=1e-6, max_iter=100000)
+#inverse_hamiltonian = conjugateGradient(b)
 
 def gram_schmidt(V):
     """Define the gram-schmidt process to orthonormalise the eigenvectors
@@ -111,10 +128,10 @@ def gram_schmidt(V):
     return U
 
 #run the power method
-largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
+"""largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
 
 print("Largest eigenvalue:", largest_eigenvalue)
-print("Corresponding eigenvector:", eigenvector)
+print("Corresponding eigenvector:", eigenvector)"""
 
 #calculate the smallest eigenvalue of the inverse of the result
 #inverse_matrix = np.linalg.inv(cg_result)
