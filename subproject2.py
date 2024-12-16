@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.random as random
-from subproject1 import hamiltonian, laplacian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
-from subproject1 import N, mu, epsilon, tau_hat, dim
+from subproject1 import hamiltonian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
+from subproject1 import N, mu, epsilon, tau_hat
 
 
 ########################## test functions ###########################
@@ -364,21 +364,12 @@ def integDiv(psi,tau_hat):
 def testIntegrators():
     print("---integratorsTest--- \n")    
 
-    print("For different number of dimension : \n")
+    print("For different number of dimension (N = 5): \n")
     for d in range(1,5):
         print("dim = ",d," : ")
 
         psi = ndim_Random(d, 5)
-        integDiv(psi, tau_hat=1)
-
-
-    print("For different value of N \n")
-    for n in [15, 55, 91]:
-        print("N = ",n," : ") 
-
-        psi = ndim_Random(1, n)
-        integDiv(psi, tau_hat=1)
-
+        integDiv(psi, tau_hat=0.1)
 
 
 

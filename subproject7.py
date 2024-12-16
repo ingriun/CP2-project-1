@@ -2,8 +2,7 @@ import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 
 
-def conjugateGradient(mat, tol, max_iter):
-    b = 1
+def conjugateGradient(mat,b, tol, max_iter):
     x = 0*ndim_Ones(mat.ndim, mat.shape[0])
     r_new = ndim_Ones(mat.ndim, mat.shape[0]) * b - np.dot(mat,x)
     r_old = r_new
@@ -17,17 +16,18 @@ def conjugateGradient(mat, tol, max_iter):
         r_new = r_new - np.dot(alpha,mat_p)
 
         if r_new < tol:
-            mat_inv = x
             break
 
         beta = (np.dot(np.transpose(r_new),r_new))/(np.dot(np.transpose(r_old),r_old))
         p = r_new + beta*p
         r_old = r_new
         k = k+1
-    return mat_inv
+    return x
 
-def hinv(v, tol=1e-6, max_iter=100000):
-    v=ndim_Random(dim, N)
+
+
+def hinv(vec, tol=1e-6, max_iter=100000):
+    h = hamiltonian(vec)
     return 
 
 def power_method(Q, tol=1e-6, max_iter=100000):

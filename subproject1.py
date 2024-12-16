@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 #######initializing variables######
 N = 201
-epsilon = 1.1
-mu = 0.8
+epsilon = 0.8
+mu = 1.2
 dim = 2
 tau_hat = 0.01
 ##################################
@@ -91,8 +91,9 @@ def euler_integrator(psi):
     return psi - 1j * tau_hat * hamiltonian(psi)
 
 # Second-order Integrator
-def second_order_integrator(psi, tau_hat):   
-    return psi - 1j * tau_hat * hamiltonian(psi) - (tau_hat**2 / 2) * (hamiltonian(hamiltonian(psi)))
+def second_order_integrator(psi, tau_hat): 
+    h = hamiltonian(psi)
+    return psi - 1j * tau_hat * h - (tau_hat**2 / 2) * hamiltonian(h)
 
 def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
@@ -122,5 +123,3 @@ def strang_splitting_integrator(psi, tau_hat):
     xi = np.fft.ifftn(k_exp * eta_tilde) #transform back to position space
 
     return v_half * xi
-
-strang_splitting_integrator(ndim_Random(dim, 5), tau_hat)
