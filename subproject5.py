@@ -9,13 +9,13 @@ def initialWavepacket(dim, N):
     x_positions = np.arange(N**dim)
     psi = ndim_Ones(dim, N)
 
-    psi =  np.exp(-(x_positions-220)**2/(2*5**2))
+    psi =  np.exp(-(x_positions-65)**2/(2*5**2))
 
 
     plt.plot(x_positions, psi.flatten())
     plt.title("Initial Wave Packet")
     plt.xlabel("Position")
-    plt.xlim(0,300)
+    plt.xlim(0,200)
     plt.ylabel("|ψ|")
     plt.show()
     return x_positions, psi
@@ -36,7 +36,7 @@ def animate_wave_function(dim, N, num_frames=100, integrator=strang_splitting_in
     line, = ax.plot(x_positions, (psi.flatten()), 'lightgrey', label="Initial Ψ")
     ax.plot(x_positions, potential(psi))
     ax.set_ylim(0, 1.5 * np.max(np.abs(psi)))
-    ax.set_xlim(0,500)
+    ax.set_xlim(0,200)
     ax.set_title("Time Evolution of the Wave Function")
     ax.set_xlabel("Position")
     ax.set_ylabel("Ψ")
