@@ -27,8 +27,8 @@ def conjugateGradient(mat, tol, max_iter):
     return mat_inv
 
 def hinv(v, tol=1e-6, max_iter=100000):
-    v=ndim_Random(dim, N)
-    return 
+    #v = ndim_Random(dim, N)
+    return conjugateGradient(hamiltonian, tol, max_iter) * v
 
 def power_method(Q, tol=1e-6, max_iter=100000):
     """define the power method to compute the largest eigenvalue and corresponding eigenvector of an operator Q
@@ -76,6 +76,14 @@ def power_method(Q, tol=1e-6, max_iter=100000):
  # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f"Power method failed to converge within {max_iter} iterations.")
 
+largest_eigenvalue, eigenvector = power_method(hinv)
+print("Largest eigenvalue:", largest_eigenvalue)
+print("Corresponding eigenvector:", eigenvector)
+
+lowest_eigenvalue = 1/largest_eigenvalue
+
+print("lowest eigenvalue:", lowest_eigenvalue)
+
 #apply cg to the hamiltonian
 """tol = 1e-6
 max_iter = 100000
@@ -85,7 +93,7 @@ cg_result = conjugateGradient(hamiltonian, tol, max_iter)
 def apply_cg_result(v):
     return np.dot(cg_result, v) """
 
-inverse_hamiltonian = conjugateGradient(hamiltonian, tol=1e-6, max_iter=100000)
+#inverse_hamiltonian = conjugateGradient(hamiltonian, tol=1e-6, max_iter=100000)
 
 def gram_schmidt(V):
     """Define the gram-schmidt process to orthonormalise the eigenvectors
@@ -111,10 +119,10 @@ def gram_schmidt(V):
     return U
 
 #run the power method
-largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
+#largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
 
-print("Largest eigenvalue:", largest_eigenvalue)
-print("Corresponding eigenvector:", eigenvector)
+#print("Largest eigenvalue:", largest_eigenvalue)
+#print("Corresponding eigenvector:", eigenvector)
 
 #calculate the smallest eigenvalue of the inverse of the result
 #inverse_matrix = np.linalg.inv(cg_result)
