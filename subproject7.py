@@ -1,5 +1,6 @@
 import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
+import numpy.random as random
 
 
 def conjugateGradient(b, tol=1e-6, max_iter=100000):
@@ -134,11 +135,60 @@ def gram_schmidt(V):
 
     for i in range(1, k):
         U[:, i] = V[:, i]
+
         for j in range(i):
-            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i])*U[:, j]
+            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i]) * U[:, j]
+
         U[:, i] = V[:, i]/np.linalg.norm(V[:, i])
 
     return U
+
+def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
+    """
+    define the arnoldi method to compute the n eigenvalue s and corresponding eigenvectors of an operator Q
+
+    Parameters:
+    Q: Function
+        The operator (Hamiltonian) to be analysed.
+    n: int
+        Number of eigenvalues
+    tol: float
+        Convergence tolerance for the method.
+    max_iter: int
+        Maximum number of iterations.
+
+    Returns:
+    tuple
+        Largest eigenvalue (float) and corresponding eigenvector (ndarray).
+    """
+    v = ndim_Random(dim, N) #choosing a random v
+    v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
+
+    K = np.zeros((n, N)) #initialising the matrix for the Krylov space
+    K[0] = v #first element is v
+
+    K = [Q(K[i-1]) for i in range(1, n+1)] #w_i = Q^i * v
+
+    eigenvalue = None
+
+    for iteration in range(maxiter):
+        w = Q(K) #compute w_i = Q w_i
+
+        w = gram_schmidt(w) #orthonormalise w
+
+        eigenvalue_new = np.vdot(w, Q(w)).real #computing eigenvalues
+
+        #check for convergence
+        if eigenvalue is not None and np.abs(eigenvalue_new - eigenvalue) < tol:
+            print(f"converged after {iteration} iterations.")
+            return eigenvalue_new, w
+        
+        #update K and eigenvalue for next step
+        K = w
+        eigenvalue = eigenvalue_new
+
+    # If maximum iterations are reached without convergence, raise an error
+    raise RuntimeError(f"Arnoldi method failed to converge within {maxiter} iterations.")
 
 #run the power method
 """largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
