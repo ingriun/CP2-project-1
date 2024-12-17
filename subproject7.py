@@ -159,10 +159,13 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
     eigenvalue = None
 
     for iteration in range(maxiter):
-        w = gram_schmidt(Q(K))
+        w = Q(K) #compute w_i = Q w_i
 
-        eigenvalue_new = np.vdot(w, Q(w)).real 
+        w = gram_schmidt(w) #orthonormalise w
 
+        eigenvalue_new = np.vdot(w, Q(w)).real #computing eigenvalues
+
+        #check for convergence
         if eigenvalue is not None and np.abs(eigenvalue_new - eigenvalue) < tol:
             print(f"converged after {iteration} iterations.")
             return eigenvalue_new, w
