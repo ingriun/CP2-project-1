@@ -4,9 +4,9 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 201
-epsilon = 0.03
-mu = 100
+N = 3
+epsilon = 0.8
+mu = 1.2
 dim = 2
 tau_hat = 0.01
 ##################################
@@ -55,11 +55,11 @@ def kineticEnergy(psi):
     k_hat = (-1/(2*mu*epsilon**2))*(laplacian(psi))
     return k_hat
 
-def potential(psi):    
-    N = psi.shape[0]
+def potential(shape):    
+    N = shape[0]
 
     # Potential centered in 0 to obtain the double-well property
-    coordinates_centered = [np.linspace(-N//2+1, N//2 , N) for dim in psi.shape]
+    coordinates_centered = [np.linspace(-N//2+1, N//2 , N) for dim in shape]
 
     grids = np.meshgrid(*coordinates_centered, indexing="ij")
     
@@ -73,7 +73,7 @@ def potential(psi):
 
 def hamiltonian(psi):
 
-    v_hat = potential(psi)
+    v_hat = potential(psi.shape)
 
     k_hat = kineticEnergy(psi)
 
@@ -91,13 +91,14 @@ def euler_integrator(psi):
     return psi - 1j * tau_hat * hamiltonian(psi)
 
 # Second-order Integrator
-def second_order_integrator(psi, tau_hat):   
-    return psi - 1j * tau_hat * hamiltonian(psi) - (tau_hat**2 / 2) * (hamiltonian(hamiltonian(psi)))
+def second_order_integrator(psi, tau_hat): 
+    h = hamiltonian(psi)
+    return psi - 1j * tau_hat * h - (tau_hat**2 / 2) * hamiltonian(h)
 
 def strang_splitting_integrator(psi, tau_hat):
     # Split Hamiltonian into kinetic and potential parts
-    pot = potential(psi)
-    v_half = np.exp(-1j * (tau_hat / 2) * pot)
+    
+    v_half = np.exp(-1j * (tau_hat / 2) * potential(psi.shape)) 
     
     # Apply potential
     eta = v_half * psi
@@ -105,10 +106,8 @@ def strang_splitting_integrator(psi, tau_hat):
     #fourier transform to momentum space
     eta_tilde = np.fft.fftn(eta)
 
-    #print(psi.shape)
     # Define the Fourier space wave numbers
     k = np.fft.fftfreq(psi.shape[0], d=1) * 2 * np.pi  # FFT frequencies, scaled by 2π
-    #print(k)
     k_mesh = np.meshgrid(*([k] * psi.ndim), indexing='ij')  # Create a meshgrid for each dimension
 
     # Calculate eigenvalues of k_hat in Fourier space using the known formula
@@ -124,5 +123,3 @@ def strang_splitting_integrator(psi, tau_hat):
     xi = np.fft.ifftn(k_exp * eta_tilde) #transform back to position space
 
     return v_half * xi
-
-strang_splitting_integrator(ndim_Random(dim, 5), tau_hat)
