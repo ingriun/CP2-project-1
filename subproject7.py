@@ -93,7 +93,12 @@ def power_method(Q, tol=1e-6, max_iter=100000):
  # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f"Power method failed to converge within {max_iter} iterations.")
 
-largest_eigenvalue, eigenvector = power_method(hinv)
+
+"""def hinv(v, tol=1e-6, max_iter=100000):
+    v = ndim_Random(dim, N)
+    return conjugateGradient(hamiltonian, tol, max_iter) * v"""
+
+largest_eigenvalue, eigenvector = power_method(hamiltonian)
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)
 
