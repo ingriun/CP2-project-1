@@ -3,10 +3,11 @@ from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 import numpy.random as random
 
 
-def conjugateGradient(b, tol=1e-6, max_iter=100000):
+def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
     """ Calculate the inverse of the hamiltonian applied to b
 
     Parameters:
+    Q: function (hamiltonian)
     b: Vector
         Solution of hamiltonian(x) = b
     tol: float
@@ -26,18 +27,16 @@ def conjugateGradient(b, tol=1e-6, max_iter=100000):
     r_old = r_new
     p = r_new
 
-    k=0
-    while k < max_iter:
-        k = k+1
+    for iteration in range(max_iter):
 
-        A_p = hamiltonian(p)
+        A_p = Q(p)
         alpha = np.vdot(r_new, r_new)/(np.vdot(p, A_p))
         x = x + alpha*p
         r_new = r_new - alpha*A_p
 
         # Check for convergence
-        if np.max(r_new) < tol:
-            print(f"converged after {k} iterations.")
+        if np.max(np.abs(r_new)) < tol:
+            print(f"converged after {iteration+1} iterations.")
             return x
 
         beta = np.vdot(r_new,r_new)/np.vdot(r_old,r_old)
