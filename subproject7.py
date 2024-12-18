@@ -3,10 +3,11 @@ from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 import numpy.random as random
 
 
-def conjugateGradient(b, tol=1e-6, max_iter=100000):
+def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
     """ Calculate the inverse of the hamiltonian applied to b
 
     Parameters:
+    Q: function (hamiltonian)
     b: Vector
         Solution of hamiltonian(x) = b
     tol: float
@@ -26,18 +27,16 @@ def conjugateGradient(b, tol=1e-6, max_iter=100000):
     r_old = r_new
     p = r_new
 
-    k=0
-    while k < max_iter:
-        k = k+1
+    for iteration in range(max_iter):
 
-        A_p = hamiltonian(p)
+        A_p = Q(p)
         alpha = np.vdot(r_new, r_new)/(np.vdot(p, A_p))
         x = x + alpha*p
         r_new = r_new - alpha*A_p
 
         # Check for convergence
-        if np.max(r_new) < tol:
-            print(f"converged after {k} iterations.")
+        if np.max(np.abs(r_new)) < tol:
+            print(f"converged after {iteration+1} iterations.")
             return x
 
         beta = np.vdot(r_new,r_new)/np.vdot(r_old,r_old)
@@ -121,8 +120,8 @@ def gram_schmidt(V):
     U: ndarray
         Orthonormalised column vectors    
     """
-    n, k = V.shape()
-    U = np.zeros(n, k)
+    n, k = np.shape(V)
+    U = np.zeros((n, k))
     U[:, 0] = V[:, 0]/np.linalg.norm(V[:, 0])
 
     for i in range(1, k):
@@ -153,30 +152,36 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
     tuple
         Largest eigenvalue (float) and corresponding eigenvector (ndarray).
     """
-    v = ndim_Random(dim, N) #choosing a random v
+    v = ndim_Random(1, 2) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
 
-    K = np.zeros((n, N)) #initialising the matrix for the Krylov space
+    K = np.zeros((n, 2)) #initialising the matrix for the Krylov space
     K[0] = v #first element is v
 
-    K = [Q(K[i-1]) for i in range(1, n+1)] #w_i = Q^i * v
-
+    """K = [Q(K[i-1]) for i in range(1, n+1)]#w_i = Q^i * v
+    K = np.array(K)
+    print(K)"""
+    for index in range(1, n):
+        K[index] = Q(K[index-1])
     eigenvalue = None
 
     for iteration in range(maxiter):
-        w = Q(K) #compute w_i = Q w_i
+        for i in range(0, n):
+            K[i] = Q(K[i]) #compute w_i = Q w_i
 
-        w = gram_schmidt(w) #orthonormalise w
-
-        eigenvalue_new = np.vdot(w, Q(w)).real #computing eigenvalues
+        K = gram_schmidt(K) #orthonormalise w
+        eigenvalue_new = np.zeros(n)
+        for i in range(0, n):
+            eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
+        print(np.shape(eigenvalue_new))
 
         #check for convergence
-        if eigenvalue is not None and np.abs(eigenvalue_new - eigenvalue) < tol:
+        if eigenvalue is not None and np.abs(np.max(eigenvalue_new - eigenvalue)) < tol:
             print(f"converged after {iteration} iterations.")
-            return eigenvalue_new, w
+            return eigenvalue_new, K
         
         #update K and eigenvalue for next step
-        K = w
+        K = K
         eigenvalue = eigenvalue_new
 
     # If maximum iterations are reached without convergence, raise an error
