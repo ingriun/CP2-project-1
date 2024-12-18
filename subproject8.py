@@ -67,6 +67,6 @@ def test_arnoldi_method():
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
 
 
+test2 = test_arnoldi_method()
 
-
-test1 = test_conjugate_gradient()
+#test1 = test_conjugate_gradient()
