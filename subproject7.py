@@ -3,7 +3,7 @@ from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 import numpy.random as random
 
 
-def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
+def conjugate_gradient(Q, b, tol=1e-6   , max_iter=100000):
     """ Calculate the inverse of the hamiltonian applied to b
 
     Parameters:

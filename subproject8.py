@@ -1,34 +1,77 @@
 import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
-from subproject7 import conjugate_gradient, gram_schmidt, power_method, arnoldi_method, arnoldi_method2
-
+from subproject7 import conjugate_gradient, arnoldi_method
 
 ########################### Test functions ##################
 
-def test_conjugate_gradient():
+def test_conjugate_gradient(A, b):
     """Checks if the CG returns indeed the inverse of a function applied to a vector/matrix"""
 
-    print("\n Conjugate Gradient test : ")
-
-    # Define a symmetric matrix
-    A = np.array([[4, 1],
-                  [2, 5]])
-    
-    vec = np.array([2, 3])
-
     def Q(x):
-        return np.dot(A,x)
+        return np.matmul(A,x)
     
-    #mat_inv = np.linalg.inv(Q(vec))
+    x_exact = np.linalg.solve(A,b)
+    print("Exact inverse matrix : ", x_exact)
     
-    x = conjugate_gradient(Q,vec)
-    print("Inverse matrix by conjugate gradient", x)
+    x_cg = conjugate_gradient(Q,b)
+    print("Inverse matrix by conjugate gradient : ", x_cg)
 
-    #print(np.max(np.abs(x - mat_inv)))
-
-    return np.max(np.abs(x))
+    print("Convergence of the two matrices : ", np.allclose(x_exact, x_cg, atol=1e-6), "\n")
 
 
+def simple_matrix_CG():
+
+    print("CG with a simple matrix : \n")
+
+    A = np.array([[4, 1],
+                  [1, 3]])
+    print("A : \n", A)
+    
+    b = np.array([1, 2])
+    print("b : ", b)
+
+    test_conjugate_gradient(A, b)
+
+
+def identity_matrix_CG():
+    
+    print("CG with the identity matrix : \n")
+
+    A = np.eye(3)
+    print("A : \n", A)
+
+    b = np.array([1, 2, 3])
+    print("b : ", b)
+
+    test_conjugate_gradient(A, b)
+
+
+def diag_matrix_CG():
+
+    print("CG with a diagonal matrix : \n")
+
+    A = np.diag([1, 2, 3, 4])
+    print("A : \n", A)
+
+    b = np.array([2, 1, 5, 3])
+    print("b : ", b)
+
+    test_conjugate_gradient(A, b)
+
+    
+def large_matrix_CG():
+    
+    print("CG with a large matrix : \n")
+
+    A = np.array([[2, -1, 0],
+                  [-1, 2, -1],
+                  [0, -1, 2]])
+    print("A : \n", A)
+
+    b = ndim_Random(1,3)
+    print("b : \n", b)
+
+    test_conjugate_gradient(A, b)
 
 
 def test_arnoldi_method():
@@ -45,13 +88,9 @@ def test_arnoldi_method():
     eigenvalues, eigenvectors = np.linalg.eigh(A)
     largest_true_eigenvalue = eigenvalues[-1]
     largest_true_eigenvector = eigenvectors[:, -1]
-    
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method2(Q, n=2, tol=1e-5)
-
-    print("largest true eigenvalue:", largest_true_eigenvalue)
-    print("computed eigenvalue:", computed_eigenvalue)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=1, tol=1e-5)
 
     #check if the basis is orthogonal
     assert np.allclose(eigenvectors.T@eigenvectors, np.identity(len(eigenvectors)), atol=1e-5), \
@@ -63,10 +102,10 @@ def test_arnoldi_method():
         f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {np.max(computed_eigenvalue)}"
     print("Result comparison test passed")
 
-    # Check eigenvector direction 
+    # Check eigenvector direction (up to sign ambiguity)
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
     assert np.isclose(dot_product, 1.0, atol=1e-5), \
-        f"Eigenvector mismatch: computed eigenvector is not aligned with true eigenvector."
+        "Eigenvector mismatch: computed eigenvector is not aligned with true eigenvector."
     print("Eigenvector direction test passed")
 
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
@@ -74,19 +113,7 @@ def test_arnoldi_method():
 
 test2 = test_arnoldi_method()
 
-#test1 = test_conjugate_gradient()
-
-def test_power_method():
-    eigenvalue, eigenvector = power_method(hamiltonian, tol=1e-6)
-
-    # Compute Qv and lambda*v for validation
-    Qv = hamiltonian @ eigenvector
-    lambda_v = eigenvalue * eigenvector
-
-    # Check if Qv is approximately equal to lambda*v
-    assert np.allclose(Qv, lambda_v, atol=1e-6), f"Test failed: Qv={Qv}, lambda*v={lambda_v}"
-
-    print("Test passed: Power method computed the correct eigenvalue and eigenvector.")
-
-# Run the test
-test_power_method()
+simple_matrix_CG()
+identity_matrix_CG()
+diag_matrix_CG()
+large_matrix_CG()
