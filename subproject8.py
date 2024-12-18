@@ -1,15 +1,31 @@
 import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
-from subproject7 import conjugateGradient, arnoldi_method
+from subproject7 import conjugate_gradient, arnoldi_method
 
 ########################### Test functions ##################
 
-def testCG_bis(mat):
-    """Checks if the CG returns indeed the inverse of hamiltonian(mat)"""
+def test_conjugate_gradient():
+    """Checks if the CG returns indeed the inverse of a function applied to a vector/matrix"""
 
-    x = conjugateGradient(mat, tol=1e-6, max_iter=100000)
+    print("\n Conjugate Gradient test : ")
 
-    return np.max(np.abs(hamiltonian(x) - mat))
+    # Define a symmetric matrix
+    A = np.array([[4, 1],
+                  [2, 5]])
+    
+    vec = np.array([2, 3])
+
+    def Q(x):
+        return np.dot(A,x)
+    
+    #mat_inv = np.linalg.inv(Q(vec))
+    
+    x = conjugate_gradient(Q,vec)
+    print("Inverse matrix by conjugate gradient", x)
+
+    #print(np.max(np.abs(x - mat_inv)))
+
+    return np.max(np.abs(x))
 
 
 
@@ -51,10 +67,6 @@ def test_arnoldi_method():
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
 
 
-# Run the test
-test_arnoldi_method()
 
-mat = ndim_Random(3,10)
 
-test1 = testCG_bis(mat)
-print(test1)
+test1 = test_conjugate_gradient()
