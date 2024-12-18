@@ -30,13 +30,13 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=2, tol=1e-6)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=1, tol=1e-6)
 
     # Compare results
     assert np.isclose(computed_eigenvalue, largest_true_eigenvalue, atol=1e-5), \
         f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {computed_eigenvalue}"
 
-    # Check eigenvector direction (up to sign ambiguity)
+    # Check eigenvector direction 
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
     assert np.isclose(dot_product, 1.0, atol=1e-5), \
         "Eigenvector mismatch: computed eigenvector is not aligned with true eigenvector."
@@ -46,6 +46,8 @@ def test_arnoldi_method():
 
 # Run the test
 test_arnoldi_method()
+
+
 
 mat = ndim_Random(3,10)
 
