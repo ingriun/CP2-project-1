@@ -128,13 +128,13 @@ def gram_schmidt(V):
         U[:, i] = V[:, i]
 
         for j in range(i):
-            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i]) * U[:, j]
+            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i])* U[:, j]
 
-        U[:, i] = V[:, i]/np.linalg.norm(V[:, i])
+        U[:, i] = U[:, i]/np.linalg.norm(U[:, i])
 
     return U
 
-def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
+def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10):
     """
     define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
@@ -164,12 +164,15 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
     for index in range(1, n):
         K[index] = Q(K[index-1])
     eigenvalue = None
+    print(K)
 
     for iteration in range(maxiter):
+        print(K)
         for i in range(0, n):
             K[i] = Q(K[i]) #compute w_i = Q w_i
 
         K = gram_schmidt(K) #orthonormalise w
+        print(K)
         eigenvalue_new = np.zeros(n)
         for i in range(0, n):
             eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
@@ -177,11 +180,12 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
 
         #check for convergence
         if eigenvalue is not None and np.abs(np.max(eigenvalue_new - eigenvalue)) < tol:
-            print(f"converged after {iteration} iterations.")
+            print(np.abs(np.max(eigenvalue_new - eigenvalue)))
+            print(f"converged after {iteration + 1} iterations.")
             return eigenvalue_new, K
-        
+        print(eigenvalue_new)
         #update K and eigenvalue for next step
-        K = K
+        
         eigenvalue = eigenvalue_new
 
     # If maximum iterations are reached without convergence, raise an error
