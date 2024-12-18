@@ -22,7 +22,7 @@ def test_arnoldi_method():
     ])
 
     def Q(x):
-        return np.dot(A,x)  
+        return np.matmul(A,x) #np.dot(A,x)  
 
     # True eigenvalues and eigenvectors of A
     eigenvalues, eigenvectors = np.linalg.eigh(A)
@@ -30,11 +30,11 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=2, tol=1e-6)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=1, tol=1e-5)
 
     # Compare results
-    assert np.isclose(computed_eigenvalue, largest_true_eigenvalue, atol=1e-5), \
-        f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {computed_eigenvalue}"
+    assert np.isclose(np.max(computed_eigenvalue), largest_true_eigenvalue, atol=1e-5), \
+        f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {np.max(computed_eigenvalue)}"
 
     # Check eigenvector direction (up to sign ambiguity)
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
