@@ -95,17 +95,9 @@ def power_method(Q, tol=1e-6, max_iter=100000):
     raise RuntimeError(f"Power method failed to converge within {max_iter} iterations.")
 
 
-"""def hinv(v, tol=1e-6, max_iter=100000):
-    v = ndim_Random(dim, N)
-    return conjugateGradient(hamiltonian, tol, max_iter) * v"""
 
-largest_eigenvalue, eigenvector = power_method(hamiltonian)
-print("Largest eigenvalue:", largest_eigenvalue)
-print("Corresponding eigenvector:", eigenvector)
 
-lowest_eigenvalue = 1/largest_eigenvalue
 
-print("lowest eigenvalue:", lowest_eigenvalue)
 
 #apply cg to the hamiltonian
 """tol = 1e-6
@@ -145,7 +137,7 @@ def gram_schmidt(V):
 
 def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
     """
-    define the arnoldi method to compute the n eigenvalue s and corresponding eigenvectors of an operator Q
+    define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
     Parameters:
     Q: Function
@@ -189,6 +181,15 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
 
     # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f"Arnoldi method failed to converge within {maxiter} iterations.")
+
+
+largest_eigenvalue, eigenvector = arnoldi_method(hamiltonian, n=2, tol=1e-6, maxiter=100000) 
+print("Largest eigenvalue:", largest_eigenvalue)
+print("Corresponding eigenvector:", eigenvector)
+
+lowest_eigenvalue = 1/largest_eigenvalue
+
+print("lowest eigenvalue:", lowest_eigenvalue)
 
 #run the power method
 """largest_eigenvalue, eigenvector = power_method(inverse_hamiltonian)
