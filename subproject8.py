@@ -48,14 +48,21 @@ def test_arnoldi_method():
     # Run the Arnoldi method
     computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=1, tol=1e-5)
 
+    #check if the basis is orthogonal
+    assert np.allclose(eigenvectors.T@eigenvectors, np.identity(len(eigenvectors)), atol=1e-5), \
+        f"Eigenvectors does not form an orthogonal basis"
+    print("Orthogonality test passed")
+
     # Compare results
     assert np.isclose(np.max(computed_eigenvalue), largest_true_eigenvalue, atol=1e-5), \
         f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {np.max(computed_eigenvalue)}"
+    print("Result comparison test passed")
 
     # Check eigenvector direction 
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
     assert np.isclose(dot_product, 1.0, atol=1e-5), \
         "Eigenvector mismatch: computed eigenvector is not aligned with true eigenvector."
+    print("Eigenvector direction test passed")
 
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
 
