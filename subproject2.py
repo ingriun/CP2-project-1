@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.random as random
+import matplotlib.pyplot as plt
 from subproject1 import hamiltonian, kineticEnergy, strang_splitting_integrator, second_order_integrator, ndim_Ones, ndim_Random
 from subproject1 import N, mu, epsilon, tau_hat
 
@@ -342,6 +343,8 @@ def testEigenvalue():
 # On Second order & Strang-Splitting integrators
 
 def integDiv(psi,tau_hat):
+    x = []
+    y = []
     for i in range(5):
         print("tau_hat = ", tau_hat, " :")
         print("---> Divergence : ")
@@ -358,6 +361,27 @@ def integDiv(psi,tau_hat):
 
         print("-----------> ", div_max)
         tau_hat = tau_hat/10
+
+        x.append(tau_hat)
+        y.append(div_max)
+    
+    fig, ax = plt.subplots()
+    subtitle = 'Divergence of the integrators with vanishing time-step (dim = %d)' % (psi.ndim)
+    fig.suptitle(subtitle)
+    t = range(len(x))
+    s = range(len(y))
+    ax.plot(t, s, marker = 'o')
+    ax.xaxis.set_ticks(t)
+    ax.xaxis.set_ticklabels(x)
+    ax.yaxis.set_ticks(s)
+    ax.yaxis.set_ticklabels(y)
+    ax.yaxis.set_inverted(True)
+    ax.set_xlabel("Tau_hat")
+    ax.set_ylabel("Divergence")
+    ax.grid(True)
+
+    plt.show()
+
     print("\n")
 
 
@@ -365,7 +389,7 @@ def testIntegrators():
     print("---integratorsTest--- \n")    
 
     print("For different number of dimension (N = 5): \n")
-    for d in range(1,5):
+    for d in range(1,2):
         print("dim = ",d," : ")
 
         psi = ndim_Random(d, 5)
@@ -385,7 +409,7 @@ print("\n ################################ \n")
 test4 = testEigenvalue()
 print("\n ################################ \n")
 test5 = testUnitarity()
-print("\n ################################ \n")"""
-test6 = testLinearityIntegrators()
+print("\n ################################ \n")
+test6 = testLinearityIntegrators()"""
 print("\n ################################ \n")
 test7 = testIntegrators()
