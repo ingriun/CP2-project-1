@@ -106,7 +106,7 @@ def gram_schmidt(V):
 
     return U
 
-def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
+def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
     
     """define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
@@ -127,8 +127,10 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
     v = ndim_Random(dim, N) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
 
-    K = np.zeros((n, 2)) #initialising the matrix for the Krylov space
-    K[0] = v #first element is v
+    """K = np.zeros((dim, n), dtype = complex) #initialising the matrix for the Krylov space
+    K[:,0] = v #first element is v"""
+    # Krylov subspace as a list of vectors
+    K = [v]
 
     """K = [Q(K[i-1]) for i in range(1, n+1)]#w_i = Q^i * v
     K = np.array(K)
@@ -137,11 +139,12 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
         K[index] = Q(K[index-1])
     eigenvalue = None
 
-    for iteration in range(maxiter):
+    for iteration in range(max_iter):
         for i in range(0, n):
-            K[i] = Q(K[i]) #compute w_i = Q w_i
+            K[i] = Q(K[i]) #compute w_i_new = Q * w_i
 
         K = gram_schmidt(K) #orthonormalise w
+
         eigenvalue_new = np.zeros(n)
         for i in range(0, n):
             eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
@@ -157,7 +160,7 @@ def arnoldi_method(Q, n, tol = 1e-6, maxiter = 10000):
         eigenvalue = eigenvalue_new
 
     # If maximum iterations are reached without convergence, raise an error
-    raise RuntimeError(f"Arnoldi method failed to converge within {maxiter} iterations.")
+    raise RuntimeError(f"Arnoldi method failed to converge within {max_iter} iterations.")
 
 
 
