@@ -1,6 +1,6 @@
 import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
-from subproject7 import conjugate_gradient, arnoldi_method3
+from subproject7 import conjugate_gradient, arnoldi_method2
 
 ########################### Test functions ##################
 
@@ -90,7 +90,7 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method3(Q, n=1, tol=1e-5)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method2(Q, n=1, tol=1e-5)
 
     #check if the basis is orthogonal
     assert np.allclose(eigenvectors.T@eigenvectors, np.identity(len(eigenvectors)), atol=1e-5), \

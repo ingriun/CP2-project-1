@@ -284,7 +284,7 @@ b = np.array([[4, 1],
 def Q(x):
         return np.matmul(b,x) #np.dot(A,x)  
 
-largest_eigenvalue, eigenvector = arnoldi_method3(Q, n=2, tol=1e-3, max_iter=10000) 
+largest_eigenvalue, eigenvector = arnoldi_method2(Q, n=2, tol=1e-3, max_iter=10000) 
 
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)
