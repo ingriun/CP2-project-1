@@ -94,15 +94,15 @@ def gram_schmidt(V):
     
     n, k = np.shape(V)
     U = np.zeros((n, k))
-    U[:, 0] = V[:, 0]/np.linalg.norm(V[:, 0])
+    U[0, :] = V[0, :]/np.linalg.norm(V[0, :])
 
     for i in range(1, k):
-        U[:, i] = V[:, i]
+        U[i, :] = V[i, :]
 
         for j in range(i):
-            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i]) * U[:, j]
+            U[i, :] = U[i, :] - np.dot(U[j, :], U[i, :]) * U[j, :]
 
-        U[:, i] = U[:, i]/np.linalg.norm(U[:, i])
+        U[i, :] = U[i, :]/np.linalg.norm(U[i, :])
 
     return U
 
@@ -126,15 +126,18 @@ def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
     """
     v = ndim_Random(dim, N) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
+    print(v)
 
-    """K = np.zeros((dim, n), dtype = complex) #initialising the matrix for the Krylov space
-    K[:,0] = v #first element is v"""
+    K = np.zeros((dim, N, N), dtype = complex) #initialising the matrix for the Krylov space
+    print(K)
+    K[0] = v #first element is v
     # Krylov subspace as a list of vectors
-    K = [v]
+    #K = [v]
 
-    """K = [Q(K[i-1]) for i in range(1, n+1)]#w_i = Q^i * v
+    K = [Q(K[i-1]) for i in range(1, n)]#w_i = Q^i * v
     K = np.array(K)
-    print(K)"""
+    print(K)
+
     for index in range(1, n):
         K[index] = Q(K[index-1])
     eigenvalue = None
@@ -152,7 +155,7 @@ def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
 
         #check for convergence
         if eigenvalue is not None and np.abs(np.max(eigenvalue_new - eigenvalue)) < tol:
-            print(f"converged after {iteration} iterations.")
+            print(f'converged after {iteration} iterations.')
             return eigenvalue_new, K
         
         #update K and eigenvalue for next step
@@ -160,7 +163,64 @@ def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
         eigenvalue = eigenvalue_new
 
     # If maximum iterations are reached without convergence, raise an error
-    raise RuntimeError(f"Arnoldi method failed to converge within {max_iter} iterations.")
+    raise RuntimeError(f'Arnoldi method failed to converge within {max_iter} iterations.')
+
+def arnoldi_method3(Q, n, tol = 1e-6, max_iter = 10000):
+    
+    """define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
+
+    Parameters:
+    Q: Function
+        The operator (Hamiltonian) to be analysed.
+    n: int
+        Number of eigenvalues
+    tol: float
+        Convergence tolerance for the method.
+    max_iter: int
+        Maximum number of iterations.
+
+    Returns:
+    tuple
+        Largest eigenvalue (float) and corresponding eigenvector (ndarray).
+    """
+    v = np.random.randn(Q(0).shape[0]) #choosing a random v
+    print(v)
+    v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
+    print(np.linalg.norm(v[0]))
+    print(f'v = {v}')
+
+    w = [v] #initialising Krylov subspace
+    print(w)
+
+    for i in range(1, n):
+        w.append(Q(w[i-1]))
+    
+    K = np.array(w)
+    print(K)
+
+    eigenvalue = None
+
+    for iteration in range(max_iter):
+
+        for i in range(0, n):
+            K[i] = Q(K[i]) #compute w_i_new = Q * w_i
+        K = gram_schmidt(K)
+
+        eigenvalue_new = np.zeros(n)
+        for i in range(0, n):
+            eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
+
+        #check for convergence
+        if eigenvalue is not None and np.abs(np.max(eigenvalue_new - eigenvalue)) < tol:
+            print(f'converged after {iteration+1} iterations.')
+            return eigenvalue_new, K
+        
+        #update K and eigenvalue for next step
+        K = K
+        eigenvalue = eigenvalue_new
+
+    # If maximum iterations are reached without convergence, raise an error
+    raise RuntimeError(f'Arnoldi method failed to converge within {max_iter} iterations.')  
 
 
 
@@ -221,7 +281,11 @@ def arnoldi_method2(Q, n, tol=1e-6, max_iter=10000):
 b = np.array([[4, 1],
             [2, 5]])
 
-largest_eigenvalue, eigenvector = arnoldi_method2(hamiltonian, n=4, tol=1e-6, max_iter=10000) 
+def Q(x):
+        return np.matmul(b,x) #np.dot(A,x)  
+
+largest_eigenvalue, eigenvector = arnoldi_method3(Q, n=2, tol=1e-3, max_iter=10000) 
+
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)
 
