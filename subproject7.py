@@ -46,6 +46,9 @@ def conjugate_gradient(Q, b, tol=1e-6   , max_iter=100000):
     # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f"Conjugate Gradient failed to converge within {max_iter} iterations.")
 
+def hinv(b):
+    return conjugate_gradient(hamiltonian, b)
+
 
 def power_method(Q, tol=1e-6, max_iter=100000):
 
@@ -92,7 +95,7 @@ def gram_schmidt(V):
     U: ndarray
         Orthonormalised column vectors"""    
     
-    U = np.zeros(np.shape(V), dtype = complex)
+    U = np.zeros(np.shape(V), dtype=complex)
     U[:, 0] = V[:, 0]/np.linalg.norm(V[:, 0])
 
     for i in range(1, np.shape(V)[0]):
@@ -281,7 +284,7 @@ def arnoldi_method2(Q, n, tol=1e-6, max_iter=10000):
     return eigenvalues, eigenvectors
 
 
-def arnoldi_method4(Q, n, tol = 1e-10, max_iter = 10000):
+def arnoldi_method4(Q, n, tol = 1e-5, max_iter = 100000):
     
     """define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
@@ -301,19 +304,16 @@ def arnoldi_method4(Q, n, tol = 1e-10, max_iter = 10000):
     """
     v = ndim_Random(dim,N) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
-    print(v)
 
     K = np.zeros((n, N, N), dtype = complex) #initialising the matrix for the Krylov space
-    print("K1 : \n",K)
+
     K = [v for i in range(0,n)]
-    print("K2 : \n",K)
 
     for index in range(1,n):
         for num in range(0,index):
             K[index] = Q(K[index])
-    print("K3 : \n",K)
+
     K = np.array(K)
-    print("K4 : \n",K)
 
     eigenvalue = None
 
@@ -408,7 +408,7 @@ b = np.array([[4, 1],
 def Q(x):
     return np.matmul(b,x) #np.dot(A,x)  
 
-largest_eigenvalue, eigenvector = arnoldi_method5(Q, n=2, tol=1e-2, max_iter=10000) 
+largest_eigenvalue, eigenvector = arnoldi_method4(Q, n=2, tol=1e-2, max_iter=10000) 
 
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)
