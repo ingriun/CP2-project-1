@@ -1,6 +1,6 @@
 import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
-from subproject7 import conjugate_gradient, arnoldi_method, gram_schmidt, b
+from subproject7 import conjugate_gradient, arnoldi_method4, gram_schmidt, b
 
 ########################### Test functions ##################
 
@@ -82,7 +82,7 @@ def test_arnoldi_method():
     ])
 
     def Q(x):
-        return np.matmul(b,x) #np.dot(A,x)  
+        return np.matmul(A,x) #np.dot(A,x)  
 
     # True eigenvalues and eigenvectors of A
     eigenvalues, eigenvectors = np.linalg.eigh(A)
