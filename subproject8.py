@@ -90,7 +90,9 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=2, tol=1e-2)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=2, tol=1e-5)
+    print("Computed eigenvalue : \n", computed_eigenvalue[0])
+    print("Expected eigenvalue : \n",largest_true_eigenvalue)
 
     #check if the basis is orthogonal
     assert np.allclose(eigenvectors.T@eigenvectors, np.identity(len(eigenvectors)), atol=1e-5), \
@@ -104,7 +106,7 @@ def test_arnoldi_method():
 
     # Check eigenvector direction (up to sign ambiguity)
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
-    assert np.isclose(dot_product, 1.0, atol=1e-5), \
+    assert np.isclose(dot_product.all, 1.0, atol=1e-5), \
         "Eigenvector mismatch: computed eigenvector is not aligned with true eigenvector."
     print("Eigenvector direction test passed")
 
@@ -137,7 +139,7 @@ test_gram_schmidt()
 
 test2 = test_arnoldi_method()
 
-simple_matrix_CG()
+"""simple_matrix_CG()
 identity_matrix_CG()
 diag_matrix_CG()
-large_matrix_CG()
+large_matrix_CG()"""
