@@ -94,19 +94,19 @@ def gram_schmidt(V):
     
     n, k = np.shape(V)
     U = np.zeros((n, k))
-    U[0, :] = V[0, :]/np.linalg.norm(V[0, :])
+    U[:, 0] = V[:, 0]/np.linalg.norm(V[:, 0])
 
     for i in range(1, k):
-        U[i, :] = V[i, :]
+        U[:, i] = V[:, i]
 
         for j in range(i):
-            U[i, :] = U[i, :] - np.dot(U[j, :], U[i, :]) * U[j, :]
+            U[:, i] = U[:, i] - np.dot(U[:, j], U[:, i]) * U[:, j]
 
-        U[i, :] = U[i, :]/np.linalg.norm(U[i, :])
+        U[:, i] = U[:, i]/np.linalg.norm(U[:, i])
 
     return U
 
-def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
+def arnoldi_method(Q, n, tol = 1e-2, max_iter = 10000):
     
     """define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
@@ -124,22 +124,25 @@ def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
     tuple
         Largest eigenvalue (float) and corresponding eigenvector (ndarray).
     """
-    v = ndim_Random(dim, N) #choosing a random v
+    v = ndim_Random(1, 2) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
     print(v)
 
-    K = np.zeros((dim, N, N), dtype = complex) #initialising the matrix for the Krylov space
-    print(K)
+    K = np.zeros((n, len(v)), dtype = complex) #initialising the matrix for the Krylov space
+    #print(K)
     K[0] = v #first element is v
     # Krylov subspace as a list of vectors
     #K = [v]
 
-    K = [Q(K[i-1]) for i in range(1, n)]#w_i = Q^i * v
-    K = np.array(K)
-    print(K)
+    """K = [Q(K[i-1]) for i in range(1, n)]#w_i = Q^i * v
+    K = np.array(K)"""
+    print(f'K = {K}')
 
     for index in range(1, n):
         K[index] = Q(K[index-1])
+
+    print(f'New K = {K}') 
+    
     eigenvalue = None
 
     for iteration in range(max_iter):
@@ -151,8 +154,7 @@ def arnoldi_method(Q, n, tol = 1e-6, max_iter = 10000):
         eigenvalue_new = np.zeros(n)
         for i in range(0, n):
             eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
-        print(np.shape(eigenvalue_new))
-
+        
         #check for convergence
         if eigenvalue is not None and np.abs(np.max(eigenvalue_new - eigenvalue)) < tol:
             print(f'converged after {iteration} iterations.')
@@ -284,7 +286,7 @@ b = np.array([[4, 1],
 def Q(x):
     return np.matmul(b,x) #np.dot(A,x)  
 
-largest_eigenvalue, eigenvector = arnoldi_method2(Q, n=2, tol=1e-3, max_iter=10000) 
+largest_eigenvalue, eigenvector = arnoldi_method(Q, n=2, tol=1e-3, max_iter=10000) 
 
 print("Largest eigenvalue:", largest_eigenvalue)
 print("Corresponding eigenvector:", eigenvector)

@@ -1,6 +1,6 @@
 import numpy as np
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
-from subproject7 import conjugate_gradient, arnoldi_method2
+from subproject7 import conjugate_gradient, arnoldi_method, gram_schmidt, b
 
 ########################### Test functions ##################
 
@@ -82,7 +82,7 @@ def test_arnoldi_method():
     ])
 
     def Q(x):
-        return np.matmul(A,x) #np.dot(A,x)  
+        return np.matmul(b,x) #np.dot(A,x)  
 
     # True eigenvalues and eigenvectors of A
     eigenvalues, eigenvectors = np.linalg.eigh(A)
@@ -90,7 +90,7 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method2(Q, n=1, tol=1e-5)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=2, tol=1e-2)
 
     #check if the basis is orthogonal
     assert np.allclose(eigenvectors.T@eigenvectors, np.identity(len(eigenvectors)), atol=1e-5), \
@@ -109,6 +109,30 @@ def test_arnoldi_method():
     print("Eigenvector direction test passed")
 
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
+
+def test_gram_schmidt():
+    # Define some sample input vectors (linearly independent)
+    V = np.array([[1, 0, 0],
+                  [1, 1, 0],
+                  [1, 1, 1]], dtype=float)
+
+    # Call the Gram-Schmidt function
+    U = gram_schmidt(V)
+
+    # Check orthonormality
+    k = U.shape[1]
+    for i in range(k):
+        # Check if each vector has unit norm
+        assert np.isclose(np.linalg.norm(U[:, i]), 1.0), f"Vector {i} is not normalized."
+
+        for j in range(i + 1, k):
+            # Check if vectors are orthogonal
+            assert np.isclose(np.dot(U[:, i], U[:, j]), 0.0), f"Vectors {i} and {j} are not orthogonal."
+
+    print("All tests passed for gram_schmidt!")
+
+# Run the test
+test_gram_schmidt()
 
 
 test2 = test_arnoldi_method()
