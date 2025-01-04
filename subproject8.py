@@ -1,5 +1,5 @@
 import numpy as np
-from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
+from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones, change_N
 from subproject7 import conjugate_gradient, arnoldi_method4, gram_schmidt, hinv
 
 ########################### Test functions ##################
@@ -137,17 +137,25 @@ def test_gram_schmidt():
 #test_gram_schmidt()
 
 def extrapolate_eigenvalue():
+    # define lists for the plot
     box_size = []
     eigenvalue = []
 
+
     for i in [3,35,67,99,211,533,1023]:
-        computed_eigenvalues = arnoldi_method4(hinv,n=2)
+        #change_N(i)
+        print(N)
+        computed_eigenvalues = [arnoldi_method4(hinv,n=3)[0][x] for x in range(0,2)]
 
         box_size.append(i)
         eigenvalue.append(computed_eigenvalues)
 
+    print(box_size,eigenvalue)
 
-test2 = test_arnoldi_method()
+
+#test2 = test_arnoldi_method()
+
+test3 = extrapolate_eigenvalue()
 
 """simple_matrix_CG()
 identity_matrix_CG()
