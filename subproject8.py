@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones, change_N
 from subproject7 import conjugate_gradient, arnoldi_method4, gram_schmidt, hinv
 
@@ -90,7 +91,7 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=2, tol=1e-5)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=2,N=2, tol=1e-5)
     print("Computed eigenvalue : \n", computed_eigenvalue[0])
     print("Expected eigenvalue : \n",largest_true_eigenvalue)
 
@@ -139,18 +140,36 @@ def test_gram_schmidt():
 def extrapolate_eigenvalue():
     # define lists for the plot
     box_size = []
-    eigenvalue = []
+    eigenvalue_1 = []
+    eigenvalue_2 = []
+    eigenvalue_3 = []
+    eigenvalue_4 = []
 
 
-    for i in [3,35,67,99,211,533,1023]:
-        #change_N(i)
-        print(N)
-        computed_eigenvalues = [arnoldi_method4(hinv,n=3)[0][x] for x in range(0,2)]
+    for i in [3,9,15,21,27,33,41,53,61]:
+        computed_eigenvalues = 1/(arnoldi_method4(hinv,n=4,N=i)[0])
 
         box_size.append(i)
-        eigenvalue.append(computed_eigenvalues)
 
-    print(box_size,eigenvalue)
+        eigenvalue_1.append(computed_eigenvalues[0])
+        eigenvalue_2.append(computed_eigenvalues[1])
+        eigenvalue_3.append(computed_eigenvalues[2])
+        eigenvalue_4.append(computed_eigenvalues[3])
+
+    print(box_size)
+
+    fig, ax = plt.subplots()
+    subtitle = 'Eigenvalues in expanding box size'
+    fig.suptitle(subtitle)
+    ax.plot(box_size, eigenvalue_1, marker = 'o')
+    ax.plot(box_size, eigenvalue_2, marker = 'o')
+    ax.plot(box_size, eigenvalue_3, marker = 'o')
+    ax.plot(box_size, eigenvalue_4, marker = 'o')
+    ax.set_xlabel("Box size (N)")
+    ax.set_ylabel("Eigenvalues")
+    ax.grid(True)
+
+    plt.show()
 
 
 #test2 = test_arnoldi_method()
