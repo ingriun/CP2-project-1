@@ -104,10 +104,12 @@ def test_arnoldi_method():
     assert np.isclose(np.max(computed_eigenvalue), largest_true_eigenvalue, atol=1e-5), \
         f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {np.max(computed_eigenvalue)}"
     print("Result comparison test passed")
-
+    print(f'comp eigvec: {computed_eigenvector}')
+    print(f'true eigvec: {largest_true_eigenvector}')
     # Check eigenvector direction (up to sign ambiguity)
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
-    assert np.isclose(dot_product.all, 1.0, atol=1e-5), \
+    print(f'dotproduct: {dot_product}')
+    assert np.isclose(dot_product, 1.0, atol=1e-5).all(), \
         "Eigenvector mismatch: computed eigenvector is not aligned with true eigenvector."
     print("Eigenvector direction test passed")
 
@@ -172,9 +174,9 @@ def extrapolate_eigenvalue():
     plt.show()
 
 
-#test2 = test_arnoldi_method()
+test2 = test_arnoldi_method()
 
-test3 = extrapolate_eigenvalue()
+#test3 = extrapolate_eigenvalue()
 
 """simple_matrix_CG()
 identity_matrix_CG()
