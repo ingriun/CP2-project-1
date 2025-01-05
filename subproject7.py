@@ -3,7 +3,7 @@ from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones
 import numpy.random as random
 
 
-def conjugate_gradient(Q, b, tol=1e-6   , max_iter=100000):
+def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
     """ Calculate the inverse of the hamiltonian applied to b
 
     Parameters:
@@ -26,6 +26,7 @@ def conjugate_gradient(Q, b, tol=1e-6   , max_iter=100000):
     r_new = b
     r_old = r_new
     p = r_new
+    A_p = Q(p)
 
     for iteration in range(max_iter):
 
@@ -36,7 +37,7 @@ def conjugate_gradient(Q, b, tol=1e-6   , max_iter=100000):
 
         # Check for convergence
         if np.max(np.abs(r_new)) < tol:
-            print(f"converged after {iteration+1} iterations.")
+            #print(f"converged after {iteration+1} iterations.")
             return x
 
         beta = np.vdot(r_new,r_new)/np.vdot(r_old,r_old)
@@ -97,7 +98,7 @@ def gram_schmidt(V):
     U = np.zeros(np.shape(V), dtype=complex)
     U[0, :] = V[0, :]/np.linalg.norm(V[0, :])
 
-    for i in range(1, np.shape(V)[1]):
+    for i in range(1, np.shape(V)[0]):
         U[i, :] = V[i, :]
 
         for j in range(i):
@@ -282,7 +283,7 @@ def arnoldi_method2(Q, n, tol=1e-6, max_iter=10000):
     return eigenvalues, eigenvectors
 
 
-def arnoldi_method4(Q, n, tol = 1e-6, max_iter = 10000):
+def arnoldi_method4(Q, n, N, tol = 1e-6, max_iter = 10000):
     
     """define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
@@ -302,19 +303,15 @@ def arnoldi_method4(Q, n, tol = 1e-6, max_iter = 10000):
     """
     v = ndim_Random(dim,N) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
-    print(v)
 
-    K = np.zeros((n, N, N), dtype = complex) #initialising the matrix for the Krylov space
-    print("K1 : \n",K)
-    K = [v for i in range(0,n)]
-    print("K2 : \n",K)
+
+    K = np.zeros((n, N), dtype = complex) #initialising the matrix for the Krylov space
+
+    K = np.array([v for i in range(0,n)])
 
     for index in range(1,n):
         for num in range(0,index):
             K[index] = Q(K[index])
-    print("K3 : \n",K)
-    K = np.array(K)
-    print("K4 : \n",K)
 
     eigenvalue = None
 
@@ -327,7 +324,7 @@ def arnoldi_method4(Q, n, tol = 1e-6, max_iter = 10000):
         eigenvalue_new = np.zeros(n)
         for i in range(0, n):
             eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
-        print(np.shape(eigenvalue_new))
+        #print(np.shape(eigenvalue_new))
 
         #check for convergence
         if eigenvalue is not None and np.abs(np.max(eigenvalue_new - eigenvalue)) < tol:
@@ -386,7 +383,7 @@ def arnoldi_method5(Q, n, tol = 1e-5, max_iter = 10000):
             K[i] = Q(K[i]) #compute w_i_new = Q * w_i
 
         K = gram_schmidt(K) #orthonormalise w
-
+        print(K)
         eigenvalue_new = np.zeros(n)
         for i in range(0, n):
             eigenvalue_new[i] = np.vdot(K[i], Q(K[i])).real #computing eigenvalues
@@ -402,7 +399,6 @@ def arnoldi_method5(Q, n, tol = 1e-5, max_iter = 10000):
 
     # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f'Arnoldi method failed to converge within {max_iter} iterations.')
-
 
 """b = np.array([[4, 1],
             [2, 5]])

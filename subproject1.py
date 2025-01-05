@@ -11,6 +11,12 @@ dim = 2
 tau_hat = 0.01
 ##################################
 
+################## Change global variables function ###############
+
+def change_N(New):
+    global N
+    N = New
+
 ############### Initialize the lattice as array ###################
 
 
