@@ -91,7 +91,7 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=2,N=2, tol=1e-5)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=1,N=2, tol=1e-5)
     print("Computed eigenvalue : \n", computed_eigenvalue[0])
     print("Expected eigenvalue : \n",largest_true_eigenvalue)
 

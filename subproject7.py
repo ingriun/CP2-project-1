@@ -301,7 +301,7 @@ def arnoldi_method4(Q, n, N, tol = 1e-6, max_iter = 10000):
     tuple
         Largest eigenvalue (float) and corresponding eigenvector (ndarray).
     """
-    v = ndim_Random(dim,N) #choosing a random v
+    v = ndim_Random(1,N) #choosing a random v
     v =  v/np.linalg.norm(v) #normalise v to ensure |v|=1
 
 
