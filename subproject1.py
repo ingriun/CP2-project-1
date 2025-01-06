@@ -4,9 +4,9 @@ from math import pi
 import matplotlib.pyplot as plt 
 
 #######initializing variables######
-N = 2
-epsilon = 0.8
-mu = 1.2
+N = 1013
+epsilon = 1/N
+mu = 20
 dim = 2
 tau_hat = 0.01
 ##################################

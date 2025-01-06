@@ -64,12 +64,13 @@ def large_matrix_CG():
     
     print("CG with a large matrix : \n")
 
-    A = np.array([[2, -1, 0],
-                  [-1, 2, -1],
-                  [0, -1, 2]])
+    A = np.array([[5, 7, 6, 5],
+                  [7, 10, 8, 7],
+                  [6, 8, 10,9],
+                  [5, 7, 9, 10]])
     print("A : \n", A)
 
-    b = ndim_Random(1,3)
+    b = ndim_Random(1,4)
     print("b : \n", b)
 
     test_conjugate_gradient(A, b)
@@ -91,7 +92,7 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=1,N=2, tol=1e-5)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=1,N=N, tol=1e-5)
     print("Computed eigenvalue : \n", computed_eigenvalue[0])
     print("Expected eigenvalue : \n",largest_true_eigenvalue)
 
@@ -147,16 +148,14 @@ def extrapolate_eigenvalue():
     eigenvalue_3 = []
     eigenvalue_4 = []
 
+    computed_eigenvalues = 1/(arnoldi_method4(hinv,n=4,N=N)[0])
 
-    for i in [3,9,15,21,27,33,41,53,61]:
-        computed_eigenvalues = 1/(arnoldi_method4(hinv,n=4,N=i)[0])
+    box_size.append(N)
 
-        box_size.append(i)
-
-        eigenvalue_1.append(computed_eigenvalues[0])
-        eigenvalue_2.append(computed_eigenvalues[1])
-        eigenvalue_3.append(computed_eigenvalues[2])
-        eigenvalue_4.append(computed_eigenvalues[3])
+    eigenvalue_1.append(computed_eigenvalues[0])
+    eigenvalue_2.append(computed_eigenvalues[1])
+    eigenvalue_3.append(computed_eigenvalues[2])
+    eigenvalue_4.append(computed_eigenvalues[3])
 
     print(box_size)
 
@@ -173,8 +172,45 @@ def extrapolate_eigenvalue():
 
     plt.show()
 
+def store_eigenvalues():
+    eigenvalue = 1/arnoldi_method4(hinv,n=4,N=N)[0]
 
-test2 = test_arnoldi_method()
+    with open('values_N.csv', "a") as values_N:
+        np.savetxt(values_N,np.array([N]),fmt="%d",delimiter=',')
+    
+    with open('eigenvalues.csv',"a") as eig:
+        np.savetxt(eig,eigenvalue, delimiter=',')
+
+
+def plot_eigenvalues():
+
+    box_size = np.loadtxt('values_N.csv')
+
+    computed_eigenvalues = np.loadtxt('eigenvalues.csv')
+
+    eigenvalue_1 = computed_eigenvalues[0::4]
+    eigenvalue_2 = computed_eigenvalues[1::4]
+    eigenvalue_3 = computed_eigenvalues[2::4]
+    eigenvalue_4 = computed_eigenvalues[3::4]
+    
+    fig, ax = plt.subplots()
+    subtitle = 'Eigenvalues in expanding box size'
+    fig.suptitle(subtitle)
+    ax.plot(box_size, eigenvalue_1, marker = 'o')
+    ax.plot(box_size, eigenvalue_2, marker = 'o')
+    ax.plot(box_size, eigenvalue_3, marker = 'o')
+    ax.plot(box_size, eigenvalue_4, marker = 'o')
+    ax.set_xlabel("Box size (N)")
+    ax.set_ylabel("Eigenvalues")
+    ax.grid(True)
+
+    plt.show()
+
+
+store_eigenvalues()
+#plot_eigenvalues()
+
+#test2 = test_arnoldi_method()
 
 #test3 = extrapolate_eigenvalue()
 
