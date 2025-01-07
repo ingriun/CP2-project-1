@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from subproject1 import hamiltonian, ndim_Random, dim, N, ndim_Ones, change_N
-from subproject7 import conjugate_gradient, arnoldi_method4, gram_schmidt, hinv
+from subproject1 import ndim_Random, dim, N
+from subproject7 import conjugate_gradient, arnoldi_method4, gram_schmidt
 
-########################### Test functions ##################
+
+########################### Tests on Conjugate Gradient ######################
 
 def test_conjugate_gradient(A, b):
     """Checks if the CG returns indeed the inverse of a function applied to a vector/matrix"""
@@ -76,6 +77,10 @@ def large_matrix_CG():
     test_conjugate_gradient(A, b)
 
 
+
+########################### Tests on the Arnoldi Method #####################
+
+
 def test_arnoldi_method():
     # Define a simple symmetric matrix 
     A = np.array([
@@ -116,6 +121,9 @@ def test_arnoldi_method():
 
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
 
+
+
+
 def test_gram_schmidt():
     # Define some sample input vectors (linearly independent)
     V = np.array([[1, 0, 0],
@@ -137,84 +145,19 @@ def test_gram_schmidt():
 
     print("All tests passed for gram_schmidt!")
 
-# Run the test
-#test_gram_schmidt()
-
-def extrapolate_eigenvalue():
-    # define lists for the plot
-    box_size = []
-    eigenvalue_1 = []
-    eigenvalue_2 = []
-    eigenvalue_3 = []
-    eigenvalue_4 = []
-
-    computed_eigenvalues = 1/(arnoldi_method4(hinv,n=4,N=N)[0])
-
-    box_size.append(N)
-
-    eigenvalue_1.append(computed_eigenvalues[0])
-    eigenvalue_2.append(computed_eigenvalues[1])
-    eigenvalue_3.append(computed_eigenvalues[2])
-    eigenvalue_4.append(computed_eigenvalues[3])
-
-    print(box_size)
-
-    fig, ax = plt.subplots()
-    subtitle = 'Eigenvalues in expanding box size'
-    fig.suptitle(subtitle)
-    ax.plot(box_size, eigenvalue_1, marker = 'o')
-    ax.plot(box_size, eigenvalue_2, marker = 'o')
-    ax.plot(box_size, eigenvalue_3, marker = 'o')
-    ax.plot(box_size, eigenvalue_4, marker = 'o')
-    ax.set_xlabel("Box size (N)")
-    ax.set_ylabel("Eigenvalues")
-    ax.grid(True)
-
-    plt.show()
-
-def store_eigenvalues():
-    eigenvalue = 1/arnoldi_method4(hinv,n=4,N=N)[0]
-
-    with open('values_N.csv', "a") as values_N:
-        np.savetxt(values_N,np.array([N]),fmt="%d",delimiter=',')
-    
-    with open('eigenvalues.csv',"a") as eig:
-        np.savetxt(eig,eigenvalue, delimiter=',')
 
 
-def plot_eigenvalues():
+################################ Tests calls ##############################
 
-    box_size = np.loadtxt('values_N.csv')
-
-    computed_eigenvalues = np.loadtxt('eigenvalues.csv')
-
-    eigenvalue_1 = computed_eigenvalues[0::4]
-    eigenvalue_2 = computed_eigenvalues[1::4]
-    eigenvalue_3 = computed_eigenvalues[2::4]
-    eigenvalue_4 = computed_eigenvalues[3::4]
-    
-    fig, ax = plt.subplots()
-    subtitle = 'Eigenvalues in expanding box size'
-    fig.suptitle(subtitle)
-    ax.plot(box_size, eigenvalue_1, marker = 'o')
-    ax.plot(box_size, eigenvalue_2, marker = 'o')
-    ax.plot(box_size, eigenvalue_3, marker = 'o')
-    ax.plot(box_size, eigenvalue_4, marker = 'o')
-    ax.set_xlabel("Box size (N)")
-    ax.set_ylabel("Eigenvalues")
-    ax.grid(True)
-
-    plt.show()
-
-
-store_eigenvalues()
-#plot_eigenvalues()
-
-#test2 = test_arnoldi_method()
-
-#test3 = extrapolate_eigenvalue()
-
-"""simple_matrix_CG()
+# On Conjugate Gradient 
+simple_matrix_CG()
 identity_matrix_CG()
 diag_matrix_CG()
-large_matrix_CG()"""
+large_matrix_CG()
+
+# On Gram-Schmidt
+test_gram_schmidt()
+
+# On Arnoldi
+test_arnoldi_method()
+

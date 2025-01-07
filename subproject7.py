@@ -4,6 +4,8 @@ import numpy.random as random
 import matplotlib.pyplot as plt
 
 
+################### Producing the inversed hamiltonian applied to a given vector ###############
+
 def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
     """ Calculate the inverse of the hamiltonian applied to b
 
@@ -48,8 +50,16 @@ def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
     # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f"Conjugate Gradient failed to converge within {max_iter} iterations.")
 
+
+
+# Calls the CG with the hamiltonian operator (used in arnoldi_method)
 def hinv(b):
     return conjugate_gradient(hamiltonian,b)
+
+
+
+########################### Power method (calculate largest eigenvalue) #####################
+
 
 def power_method(Q, tol=1e-6, max_iter=100000):
 
@@ -83,6 +93,10 @@ def power_method(Q, tol=1e-6, max_iter=100000):
 
  # If maximum iterations are reached without convergence, raise an error
     raise RuntimeError(f"Power method failed to converge within {max_iter} iterations.")
+
+
+
+############################ Arnoldi Method ##########################
 
 
 def gram_schmidt(V):
@@ -174,6 +188,8 @@ lowest_eigenvalue = 1/largest_eigenvalue
 
 print("Lowest eigenvalue (N=351, ε=0.1):", lowest_eigenvalue)
 #print("Corresponding eigenvector:", eigenvector)
+
+
 
 
 ##################### Plots for L -> infinity and a ->0 ##############################
