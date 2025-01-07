@@ -197,7 +197,7 @@ print("Lowest eigenvectors (N=351): \n", eigenvectors)
 ##################### Plots for L -> infinity and a ->0 ##############################
 
 # Input data
-"""N_values = [3, 15, 51, 101, 151, 201, 251, 301, 351, 401, 501, 701, 1001, 1501, 2001]
+N_values = [3, 15, 51, 101, 151, 201, 251, 301, 351, 401, 501, 701, 1001, 1501, 2001]
 eigenvalue_arrays = [
     [2.49966668, 752.49973762, 752.49959393, 2.49966668],  # array for N=3
     [2.49068075, 45.71696764, 45.71896389, 167.92481792],  # array for N=15
@@ -260,12 +260,12 @@ plt.xlim(0.000625,0.1)
 plt.title('Eigenvalues as a approaches 0')
 plt.legend()
 plt.grid(True)
-plt.show()"""
+plt.show()
 
 
-
-"""# Extract the first eigenvector 
-eigenfunction = eigenvector[0].real  
+"""
+# Extract the first eigenvector 
+eigenfunction = eigenvectors[0].real  
 
 # Define x-axis values 
 x_values = np.arange(len(eigenfunction))  
@@ -274,7 +274,7 @@ x_values = np.arange(len(eigenfunction))
 plt.figure(figsize=(10, 6))
 plt.plot(x_values, eigenfunction, label="Eigenfunction 1")
 
-for i, eigenfunction in enumerate(eigenvector):
+for i, eigenfunction in enumerate(eigenvectors):
     plt.plot(x_values, eigenfunction, label=f"Eigenfunction {i+1}")
 
 
@@ -284,14 +284,14 @@ plt.ylabel("Amplitude")
 plt.title("Eigenfunction of the Hamiltonian (ε=0.000625)")
 plt.grid(True)
 plt.legend()
-plt.show()"""
+plt.show()
 
-"""fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
 axes = axes.flatten()  # Flatten to easily index subplots
 
 # Plot each eigenvector in a separate subplot
 for i, ax in enumerate(axes):
-    ax.plot(x_values, eigenvector[i], label=f"Eigenfunction {i+1}", marker='o')
+    ax.plot(x_values, eigenvectors[i], label=f"Eigenfunction {i+1}", marker='o')
     ax.set_xlabel("Position / Index")
     ax.set_ylabel("Amplitude")
     ax.set_title(f"Eigenfunction {i+1}")
