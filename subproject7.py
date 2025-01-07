@@ -263,42 +263,25 @@ plt.grid(True)
 plt.show()
 
 
-"""
+
 # Extract the first eigenvector 
 eigenfunction = eigenvectors[0].real  
 
 # Define x-axis values 
 x_values = np.arange(len(eigenfunction))  
 
-# Plot the eigenfunction
-plt.figure(figsize=(10, 6))
-plt.plot(x_values, eigenfunction, label="Eigenfunction 1")
-
-for i, eigenfunction in enumerate(eigenvectors):
-    plt.plot(x_values, eigenfunction, label=f"Eigenfunction {i+1}")
-
-
-plt.xlabel("Lattice Site Index")
-plt.xlim(20000,35000)
-plt.ylabel("Amplitude")
-plt.title("Eigenfunction of the Hamiltonian (ε=0.000625)")
-plt.grid(True)
-plt.legend()
-plt.show()
-
 fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-axes = axes.flatten()  # Flatten to easily index subplots
+axes = axes.flatten()  
 
 # Plot each eigenvector in a separate subplot
 for i, ax in enumerate(axes):
     ax.plot(x_values, eigenvectors[i], label=f"Eigenfunction {i+1}", marker='o')
-    ax.set_xlabel("Position / Index")
+    ax.set_xlabel("Lattice Site Index")
     ax.set_ylabel("Amplitude")
     ax.set_title(f"Eigenfunction {i+1}")
     ax.grid(True)
     ax.legend()
 
-# Adjust layout
 plt.tight_layout()
-plt.show()"""
+plt.show()
 
