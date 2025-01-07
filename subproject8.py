@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from subproject1 import ndim_Random, dim, N
-from subproject7 import conjugate_gradient, arnoldi_method4, gram_schmidt
+from subproject7 import conjugate_gradient, arnoldi_method, gram_schmidt
 
 
 ########################### Tests on Conjugate Gradient ######################
@@ -13,12 +13,12 @@ def test_conjugate_gradient(A, b):
         return np.matmul(A,x)
     
     x_exact = np.linalg.solve(A,b)
-    print("Exact inverse matrix : ", x_exact)
+    print("\n Exact inverse matrix : \n ", x_exact, "\n")
     
     x_cg = conjugate_gradient(Q,b)
-    print("Inverse matrix by conjugate gradient : ", x_cg)
+    print("Inverse matrix by conjugate gradient : \n ", x_cg, "\n")
 
-    print("Convergence of the two matrices : ", np.allclose(x_exact, x_cg, atol=1e-6), "\n")
+    print("Convergence of the two matrices (tolerance = 1e-6): ", np.allclose(x_exact, x_cg, atol=1e-6), "\n")
 
 
 def simple_matrix_CG():
@@ -78,7 +78,7 @@ def large_matrix_CG():
 
 
 
-########################### Tests on the Arnoldi Method #####################
+########################### Test on the Arnoldi Method #####################
 
 
 def test_arnoldi_method():
@@ -97,7 +97,7 @@ def test_arnoldi_method():
     largest_true_eigenvector = eigenvectors[:, -1]
 
     # Run the Arnoldi method
-    computed_eigenvalue, computed_eigenvector = arnoldi_method4(Q, n=1,N=N, tol=1e-5)
+    computed_eigenvalue, computed_eigenvector = arnoldi_method(Q, n=1,N=2, tol=1e-5)
     print("Computed eigenvalue : \n", computed_eigenvalue[0])
     print("Expected eigenvalue : \n",largest_true_eigenvalue)
 
@@ -110,8 +110,8 @@ def test_arnoldi_method():
     assert np.isclose(np.max(computed_eigenvalue), largest_true_eigenvalue, atol=1e-5), \
         f"Eigenvalue mismatch: expected {largest_true_eigenvalue}, got {np.max(computed_eigenvalue)}"
     print("Result comparison test passed")
-    print(f'comp eigvec: {computed_eigenvector}')
-    print(f'true eigvec: {largest_true_eigenvector}')
+    print(f'computed eigenvector: {computed_eigenvector}')
+    print(f'true eigenvector: {largest_true_eigenvector}')
     # Check eigenvector direction (up to sign ambiguity)
     dot_product = np.abs(np.dot(computed_eigenvector, largest_true_eigenvector))
     print(f'dotproduct: {dot_product}')
@@ -122,7 +122,7 @@ def test_arnoldi_method():
     print("Test passed: Arnoldi method correctly finds the largest eigenvalue and eigenvector.")
 
 
-
+############################ Test on Gram-Schmidt ###################
 
 def test_gram_schmidt():
     # Define some sample input vectors (linearly independent)
@@ -150,14 +150,23 @@ def test_gram_schmidt():
 ################################ Tests calls ##############################
 
 # On Conjugate Gradient 
+print("############## Conjugate Gardient tests ############ \n")
 simple_matrix_CG()
+print("#################################################### \n")
 identity_matrix_CG()
+print("#################################################### \n")
 diag_matrix_CG()
+print("#################################################### \n")
 large_matrix_CG()
 
 # On Gram-Schmidt
+print("################ Gram-Schmidt test ################# \n")
 test_gram_schmidt()
 
+print("\n")
+
 # On Arnoldi
+print("############### Arnoldi Method test ################ \n")
 test_arnoldi_method()
+
 

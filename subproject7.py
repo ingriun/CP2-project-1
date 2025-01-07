@@ -29,7 +29,6 @@ def conjugate_gradient(Q, b, tol=1e-6, max_iter=100000):
     r_new = b
     r_old = r_new
     p = r_new
-    A_p = Q(p)
 
     for iteration in range(max_iter):
 
@@ -126,7 +125,7 @@ def gram_schmidt(V):
 
 
 
-def arnoldi_method4(Q, n, N, tol = 1e-6, max_iter = 10000):
+def arnoldi_method(Q, n, N, tol = 1e-6, max_iter = 10000):
     
     """define the arnoldi method to compute the n eigenvalues and corresponding eigenvectors of an operator Q
 
@@ -182,12 +181,15 @@ def arnoldi_method4(Q, n, N, tol = 1e-6, max_iter = 10000):
     raise RuntimeError(f'Arnoldi method failed to converge within {max_iter} iterations.')
 
 
-largest_eigenvalue, eigenvector = arnoldi_method4(hinv, n=4, N=56160, tol=1e-6,max_iter=1000)
+largest_eigenvalues, eigenvectors = arnoldi_method(hinv, n=4, N=351, tol=1e-6,max_iter=1000)
 
-lowest_eigenvalue = 1/largest_eigenvalue
+lowest_eigenvalue = 1/largest_eigenvalues
 
-print("Lowest eigenvalue (N=351, ε=0.1):", lowest_eigenvalue)
-#print("Corresponding eigenvector:", eigenvector)
+
+print("\n")
+print("Lowest eigenvalues (N=351):", lowest_eigenvalue)
+print("\n")
+print("Lowest eigenvectors (N=351): \n", eigenvectors)
 
 
 
@@ -262,7 +264,7 @@ plt.show()"""
 
 
 
-# Extract the first eigenvector 
+"""# Extract the first eigenvector 
 eigenfunction = eigenvector[0].real  
 
 # Define x-axis values 
@@ -272,8 +274,8 @@ x_values = np.arange(len(eigenfunction))
 plt.figure(figsize=(10, 6))
 plt.plot(x_values, eigenfunction, label="Eigenfunction 1")
 
-"""for i, eigenfunction in enumerate(eigenvector):
-    plt.plot(x_values, eigenfunction, label=f"Eigenfunction {i+1}")"""
+for i, eigenfunction in enumerate(eigenvector):
+    plt.plot(x_values, eigenfunction, label=f"Eigenfunction {i+1}")
 
 
 plt.xlabel("Lattice Site Index")
@@ -282,7 +284,7 @@ plt.ylabel("Amplitude")
 plt.title("Eigenfunction of the Hamiltonian (ε=0.000625)")
 plt.grid(True)
 plt.legend()
-plt.show()
+plt.show()"""
 
 """fig, axes = plt.subplots(2, 2, figsize=(12, 8))
 axes = axes.flatten()  # Flatten to easily index subplots
